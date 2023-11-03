@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="Performance_CV" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="Performance_CV"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="PERFORMANCE">
+    <resourceUri>PERFORMANCE</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="EVALUATION_RATING"/>
+      <viewAttribute id="FEEDBACK_COMMENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="PERFORMANCE"/>
+    <filter>&quot;ID&quot; &gt; 1000</filter>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Projection_1">
+  <attributes>
+    <attribute id="FEEDBACK_COMMENT" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Feedback comment"/>
+      <keyMapping columnObjectName="Projection_1" columnName="FEEDBACK_COMMENT"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="ID" order="1" aggregationType="var" measureType="simple">
+      <descriptions defaultDescription="Employee ID"/>
+      <measureMapping columnObjectName="Projection_1" columnName="ID"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="EVALUATION_RATING" order="2" aggregationType="var" measureType="simple">
+      <descriptions defaultDescription="Evaluation results"/>
+      <measureMapping columnObjectName="Projection_1" columnName="EVALUATION_RATING"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="107" y="199"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
