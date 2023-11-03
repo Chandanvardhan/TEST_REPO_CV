@@ -15,10 +15,15 @@
       <viewAttribute id="ID"/>
       <viewAttribute id="EVALUATION_RATING"/>
       <viewAttribute id="FEEDBACK_COMMENT"/>
+      <viewAttribute id="REPORTS_TO"/>
+    
+      <viewAttribute id="SATISFACTION_INDEX"/>
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="PERFORMANCE"/>
-    <filter>&quot;ID&quot; &gt; 1000</filter>
+    <filter>&quot;ID&quot; &gt; 1000 and
+&quot;EVALUATION_RATING&quot; &gt; 1
+</filter>
   </calculationView>
 </calculationViews>
 
@@ -49,12 +54,14 @@
 <layout>
   <shapes>
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
-      <upperLeftCorner x="40" y="85"/>
+      <upperLeftCorner x="100" y="105"/>
+    
+      <rectangleSize width="160"/>
     </shape>
     
   
     <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="107" y="199"/>
+      <upperLeftCorner x="230" y="246"/>
       <rectangleSize height="30" width="160"/>
     </shape>
   </shapes>

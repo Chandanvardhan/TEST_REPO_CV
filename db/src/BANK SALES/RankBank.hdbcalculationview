@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="RankBank" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="RankBank.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="Bank">
+    <resourceUri>Bank</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="AGE"/>
+      <viewAttribute id="C_ID"/>
+      <viewAttribute id="NAME"/>
+      <viewAttribute id="SURNAME"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="REGION"/>
+      <viewAttribute id="ROLES"/>
+      <viewAttribute id="D_JOIN"/>
+      <viewAttribute id="BALANCE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Bank"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:RankView" id="Rank_2">
+    <viewAttributes>
+      <viewAttribute id="AGE" aggregationType="sum"/>
+      <viewAttribute id="C_ID" aggregationType="sum"/>
+      <viewAttribute id="NAME"/>
+      <viewAttribute id="SURNAME"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="REGION"/>
+      <viewAttribute id="ROLES"/>
+      <viewAttribute id="D_JOIN"/>
+      <viewAttribute id="BALANCE" aggregationType="sum"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1"/>
+    <rankingFilter type="RANK" offset="0" offsetReference="FRONT" dynamicPartitionAttributes="false">
+      <order byViewAttributeName="BALANCE" direction="DESC"/>
+      <order byViewAttributeName="AGE" direction="ASC"/>
+      <rankThreshold>
+        <value>4000</value>
+      </rankThreshold>
+      <rankViewAttributeName>Rank_Column</rankViewAttributeName>
+    </rankingFilter>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Rank_2">
+  <attributes>
+    <attribute id="NAME" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NAME"/>
+      <keyMapping columnObjectName="Rank_2" columnName="NAME"/>
+    </attribute>
+    <attribute id="SURNAME" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SURNAME"/>
+      <keyMapping columnObjectName="Rank_2" columnName="SURNAME"/>
+    </attribute>
+    <attribute id="GENDER" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="GENDER"/>
+      <keyMapping columnObjectName="Rank_2" columnName="GENDER"/>
+    </attribute>
+    <attribute id="REGION" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="REGION"/>
+      <keyMapping columnObjectName="Rank_2" columnName="REGION"/>
+    </attribute>
+    <attribute id="ROLES" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ROLES"/>
+      <keyMapping columnObjectName="Rank_2" columnName="ROLES"/>
+    </attribute>
+    <attribute id="D_JOIN" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="D_JOIN"/>
+      <keyMapping columnObjectName="Rank_2" columnName="D_JOIN"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="Rank_Column" order="1" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="Rank_Column"/>
+      <measureMapping columnObjectName="Rank_2" columnName="Rank_Column"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="NAME"/>
+        <attribute attributeName="SURNAME"/>
+        <attribute attributeName="GENDER"/>
+        <attribute attributeName="REGION"/>
+        <attribute attributeName="ROLES"/>
+        <attribute attributeName="D_JOIN"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="AGE" order="2" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="AGE"/>
+      <measureMapping columnObjectName="Rank_2" columnName="AGE"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="NAME"/>
+        <attribute attributeName="SURNAME"/>
+        <attribute attributeName="GENDER"/>
+        <attribute attributeName="REGION"/>
+        <attribute attributeName="ROLES"/>
+        <attribute attributeName="D_JOIN"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="C_ID" order="3" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="C_ID"/>
+      <measureMapping columnObjectName="Rank_2" columnName="C_ID"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="NAME"/>
+        <attribute attributeName="SURNAME"/>
+        <attribute attributeName="GENDER"/>
+        <attribute attributeName="REGION"/>
+        <attribute attributeName="ROLES"/>
+        <attribute attributeName="D_JOIN"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="BALANCE" order="10" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="BALANCE"/>
+      <measureMapping columnObjectName="Rank_2" columnName="BALANCE"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="NAME"/>
+        <attribute attributeName="SURNAME"/>
+        <attribute attributeName="GENDER"/>
+        <attribute attributeName="REGION"/>
+        <attribute attributeName="ROLES"/>
+        <attribute attributeName="D_JOIN"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="92" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="322"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+  
+    <shape expanded="true" modelObjectName="Rank_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape></shapes>
+</layout>
+</Calculation:scenario>
