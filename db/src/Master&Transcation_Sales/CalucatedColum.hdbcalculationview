@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CalucatedColum" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="CalucatedColum.hdbcalculationview"/>
+<localVariables>
+  <variable id="Input_Parameter" parameter="true">
+    <descriptions defaultDescription=""/>
+    <variableProperties datatype="BIGINT" length="19" scale="0" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+      <derivationRule inputEnabled="true">
+        <resourceUri>MASTER_SALES</resourceUri>
+        <resultElementName>PRODUCTID</resultElementName>
+      </derivationRule>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="MASTER_SHIPPING">
+    <resourceUri>MASTER_SHIPPING</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:HierarchyView" id="Hierarchy_1" function="HIERARCHY">
+    <viewAttributes>
+      <viewAttribute datatype="BIGINT" id="PRODUCTID" aggregationType="sum" length="19"/>
+      <viewAttribute datatype="NVARCHAR" length="221" id="PRODUCTNAME"/>
+      <viewAttribute datatype="NVARCHAR" length="221" id="CATEGORY"/>
+      <viewAttribute datatype="BIGINT" id="HIERARCHY_RANK"/>
+      <viewAttribute datatype="BIGINT" id="HIERARCHY_TREE_SIZE"/>
+      <viewAttribute datatype="BIGINT" id="HIERARCHY_PARENT_RANK"/>
+      <viewAttribute datatype="INTEGER" id="HIERARCHY_LEVEL"/>
+      <viewAttribute datatype="TINYINT" id="HIERARCHY_IS_CYCLE"/>
+      <viewAttribute datatype="TINYINT" id="HIERARCHY_IS_ORPHAN"/>
+      <viewAttribute datatype="NVARCHAR" length="221" id="PARENT_ID"/>
+      <viewAttribute datatype="NVARCHAR" length="221" id="NODE_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MASTER_SHIPPING">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTID" source="PRODUCTID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTNAME" source="PRODUCTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY" source="CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PARENT_ID" source="CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE_ID" source="PRODUCTNAME"/>
+    </input>
+    <hierarchyParameterization>
+      <siblingOrder byAttribute="PRODUCTNAME" direction="ASC" uniqueName="PRODUCTNAME"/>
+    </hierarchyParameterization>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Hierarchy_1">
+  <attributes>
+    <attribute id="PRODUCTNAME" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PRODUCTNAME"/>
+      <keyMapping columnObjectName="Hierarchy_1" columnName="PRODUCTNAME"/>
+    </attribute>
+    <attribute id="CATEGORY" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CATEGORY"/>
+      <keyMapping columnObjectName="Hierarchy_1" columnName="CATEGORY"/>
+    </attribute>
+    <attribute id="PARENT_ID" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PARENT_ID"/>
+      <keyMapping columnObjectName="Hierarchy_1" columnName="PARENT_ID"/>
+    </attribute>
+    <attribute id="NODE_ID" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NODE_ID"/>
+      <keyMapping columnObjectName="Hierarchy_1" columnName="NODE_ID"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="PRODUCTID" order="1" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PRODUCTID"/>
+      <measureMapping columnObjectName="Hierarchy_1" columnName="PRODUCTID"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="HIERARCHY_RANK" order="4" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HIERARCHY_RANK"/>
+      <measureMapping columnObjectName="Hierarchy_1" columnName="HIERARCHY_RANK"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="HIERARCHY_TREE_SIZE" order="5" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HIERARCHY_TREE_SIZE"/>
+      <measureMapping columnObjectName="Hierarchy_1" columnName="HIERARCHY_TREE_SIZE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="HIERARCHY_PARENT_RANK" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HIERARCHY_PARENT_RANK"/>
+      <measureMapping columnObjectName="Hierarchy_1" columnName="HIERARCHY_PARENT_RANK"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="HIERARCHY_LEVEL" order="7" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HIERARCHY_LEVEL"/>
+      <measureMapping columnObjectName="Hierarchy_1" columnName="HIERARCHY_LEVEL"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="HIERARCHY_IS_CYCLE" order="8" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HIERARCHY_IS_CYCLE"/>
+      <measureMapping columnObjectName="Hierarchy_1" columnName="HIERARCHY_IS_CYCLE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="HIERARCHY_IS_ORPHAN" order="9" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="HIERARCHY_IS_ORPHAN"/>
+      <measureMapping columnObjectName="Hierarchy_1" columnName="HIERARCHY_IS_ORPHAN"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Hierarchy_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="150" y="233"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

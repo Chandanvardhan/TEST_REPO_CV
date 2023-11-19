@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="Shipping" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="Shipping.hdbcalculationview"/>
+<localVariables>
+  <variable id="Filter_1">
+    <descriptions defaultDescription="Filter_1"/>
+    <variableProperties defaultValue="">
+      <valueDomain type="AttributeValue"/>
+      <selection type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="MASTER_SALES">
+    <resourceUri>MASTER_SALES</resourceUri>
+  </DataSource>
+  <DataSource id="TRANS_SALES">
+    <resourceUri>TRANS_SALES</resourceUri>
+  </DataSource>
+  <DataSource id="TRANS_SHIPPING">
+    <resourceUri>TRANS_SHIPPING</resourceUri>
+  </DataSource>
+  <DataSource id="MASTER_SHIPPING">
+    <resourceUri>MASTER_SHIPPING</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_2" cardinality="CN_N" joinType="fullOuter">
+    <viewAttributes>
+      <viewAttribute id="PRODUCTNAME"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="PRODUCTID" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="SALEDATE"/>
+      <viewAttribute hidden="true" id="JOIN$PRODUCTID$PRODUCTID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MASTER_SALES">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTNAME" source="PRODUCTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY" source="CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCTID$PRODUCTID" source="PRODUCTID"/>
+    </input>
+    <input node="TRANS_SALES">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTID" source="PRODUCTID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALEDATE" source="SALEDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCTID$PRODUCTID" source="PRODUCTID"/>
+    </input>
+    <joinAttribute name="JOIN$PRODUCTID$PRODUCTID"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_1" cardinality="CN_N" joinType="fullOuter" multiJoinNode="Join_1" multiJoinCentralTable="MASTER_SHIPPING" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="TRANSACTIONID" aggregationType="sum"/>
+      <viewAttribute id="SHIPPEDDATE"/>
+      <viewAttribute id="SALEDATE"/>
+      <viewAttribute id="PRODUCTID" aggregationType="sum"/>
+      <viewAttribute hidden="true" id="JOIN$PRODUCTID$PRODUCTID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="TRANS_SHIPPING">
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TRANSACTIONID" source="TRANSACTIONID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SHIPPEDDATE" source="SHIPPEDDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTID" source="PRODUCTID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCTID$PRODUCTID" source="PRODUCTID"/>
+    </input>
+    <input node="Join_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALEDATE" source="SALEDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCTID$PRODUCTID" source="PRODUCTID"/>
+    </input>
+    <joinAttribute name="JOIN$PRODUCTID$PRODUCTID"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_2" cardinality="CN_N" joinType="leftOuter" multiJoinNode="Join_1" multiJoinCentralTable="MASTER_SHIPPING" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="TRANSACTIONID" aggregationType="sum"/>
+      <viewAttribute id="SHIPPEDDATE"/>
+      <viewAttribute id="SALEDATE"/>
+      <viewAttribute id="PRODUCTID" aggregationType="sum"/>
+      <viewAttribute id="PRODUCTNAME"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute hidden="true" id="JOIN$PRODUCTID$PRODUCTID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MASTER_SHIPPING">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTID" source="PRODUCTID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTNAME" source="PRODUCTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY" source="CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCTID$PRODUCTID" source="PRODUCTID"/>
+    </input>
+    <input node="Join_1_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TRANSACTIONID" source="TRANSACTIONID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SHIPPEDDATE" source="SHIPPEDDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALEDATE" source="SALEDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCTID$PRODUCTID" source="PRODUCTID"/>
+    </input>
+    <joinAttribute name="JOIN$PRODUCTID$PRODUCTID"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1_2">
+  <attributes>
+    <attribute id="PRODUCTNAME" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PRODUCTNAME"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="PRODUCTNAME"/>
+    </attribute>
+    <attribute id="CATEGORY" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CATEGORY"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="CATEGORY"/>
+    </attribute>
+    <attribute id="SHIPPEDDATE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SHIPPEDDATE"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="SHIPPEDDATE"/>
+    </attribute></attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="PRODUCTID" order="1" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PRODUCTID"/>
+      <measureMapping columnObjectName="Join_1_2" columnName="PRODUCTID"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="QUANTITY" order="4" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="QUANTITY"/>
+      <measureMapping columnObjectName="Join_1_2" columnName="QUANTITY"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="TRANSACTIONID" order="5" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TRANSACTIONID"/>
+      <measureMapping columnObjectName="Join_1_2" columnName="TRANSACTIONID"/>
+      <exceptionAggregationMetadata/>
+    </measure></baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="247" y="105"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="637" y="240"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="MASTER_SALES" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="172"/>
+    </shape>
+    <shape modelObjectName="TRANS_SALES" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="175"/>
+    </shape>
+  
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="263" y="242"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape modelObjectName="MASTER_SHIPPING" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="42" y="28"/>
+      <rectangleSize width="178"/>
+    </shape>
+    <shape modelObjectName="TRANS_SHIPPING" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="175"/>
+    </shape>
+    <shape modelObjectName="Join_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="620" y="30"/>
+      <rectangleSize width="250"/>
+    </shape></shapes>
+</layout>
+</Calculation:scenario>

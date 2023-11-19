@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="Fsales" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" propagateInstantiation="true">
+<descriptions defaultDescription="Fsales.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="TRANSFOOD" partitionedExecution="true" clientColumn="DATES">
+    <partitionAttributeName>ID</partitionAttributeName>
+    <resourceUri>TRANSFOOD</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="DATES"/>
+      <viewAttribute id="REGION"/>
+      <viewAttribute id="CITY"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="PRODUCT"/>
+      <viewAttribute id="QTY"/>
+      <viewAttribute id="UNITPRICE"/>
+    </viewAttributes>
+    <calculatedViewAttributes>
+      <calculatedViewAttribute id="Total_Sales" datatype="DECIMAL" length="13" scale="1" expressionLanguage="SQL">
+        <formula>&quot;QTY&quot;*&quot;UNITPRICE&quot;</formula>
+      </calculatedViewAttribute>
+    </calculatedViewAttributes>
+    <input node="TRANSFOOD"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:RankView" id="Rank_1" allowFilterPushdown="true">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="DATES"/>
+      <viewAttribute id="REGION"/>
+      <viewAttribute id="CITY"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="PRODUCT"/>
+      <viewAttribute id="QTY" aggregationType="sum"/>
+      <viewAttribute id="UNITPRICE" aggregationType="sum"/>
+      <viewAttribute id="Total_Sales" aggregationType="max"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1"/>
+    <rankingFilter type="DENSE_RANK" offset="0" offsetReference="BACK" dynamicPartitionAttributes="false">
+      <order byViewAttributeName="Total_Sales" direction="DESC"/>
+      <order byViewAttributeName="UNITPRICE" direction="DESC"/>
+      <rankThreshold/>
+      <rankViewAttributeName>Rank_Column</rankViewAttributeName>
+    </rankingFilter>
+  </calculationView>
+  <calculationView xsi:type="Calculation:WindowFunctionView" id="WindowFunction_1">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="DATES"/>
+      <viewAttribute id="REGION"/>
+      <viewAttribute id="CITY"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="PRODUCT"/>
+      <viewAttribute id="QTY" aggregationType="sum"/>
+      <viewAttribute id="UNITPRICE" aggregationType="sum"/>
+      <viewAttribute id="Total_Sales" aggregationType="max"/>
+      <viewAttribute id="Rank_Column" aggregationType="sum"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Rank_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DATES" source="DATES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="REGION" source="REGION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CITY" source="CITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY" source="CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT" source="PRODUCT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QTY" source="QTY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="UNITPRICE" source="UNITPRICE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="Total_Sales" source="Total_Sales"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="Rank_Column" source="Rank_Column"/>
+    </input>
+    <function name="RANK"/>
+    <windowFunctionResultColumn datatype="DOUBLE">Rank</windowFunctionResultColumn>
+    <orderAttributes>
+      <orderAttribute direction="DESC">Total_Sales</orderAttribute>
+      <orderAttribute direction="DESC">UNITPRICE</orderAttribute>
+    </orderAttributes>
+    <partitionAttributes/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="WindowFunction_1">
+  <attributes>
+    <attribute id="ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="ID"/>
+    </attribute>
+    <attribute id="DATES" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DATES"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="DATES"/>
+    </attribute>
+    <attribute id="REGION" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="REGION"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="REGION"/>
+    </attribute>
+    <attribute id="CITY" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CITY"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="CITY"/>
+    </attribute>
+    <attribute id="CATEGORY" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CATEGORY"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="CATEGORY"/>
+    </attribute>
+    <attribute id="PRODUCT" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PRODUCT"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="PRODUCT"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="QTY" order="7" aggregationType="sum" measureType="simple" unconverted="false">
+      <descriptions defaultDescription="QTY"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="QTY"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="ID"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="UNITPRICE" order="8" aggregationType="sum" measureType="simple" unconverted="false">
+      <descriptions defaultDescription="UNITPRICE"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="UNITPRICE"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="ID"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="Total_Sales" order="9" aggregationType="sum" measureType="simple" unconverted="false">
+      <descriptions defaultDescription="Total_Sales"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="Total_Sales"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="ID"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  
+    <measure id="Rank_Column" order="10" aggregationType="var" measureType="simple" unconverted="false">
+      <descriptions defaultDescription="Rank_Column"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="Rank_Column"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="268" y="131"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="353" y="407"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Rank_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="256"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="WindowFunction_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="179"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

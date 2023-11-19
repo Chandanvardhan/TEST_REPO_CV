@@ -12,13 +12,9 @@
 <calculationViews>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
-      <viewAttribute id="ID"/>
       <viewAttribute id="EVALUATION_RATING"/>
       <viewAttribute id="FEEDBACK_COMMENT"/>
-      <viewAttribute id="REPORTS_TO"/>
-    
-      <viewAttribute id="SATISFACTION_INDEX"/>
-    </viewAttributes>
+      <viewAttribute id="REPORTS_TO"/></viewAttributes>
     <calculatedViewAttributes/>
     <input node="PERFORMANCE"/>
     <filter>&quot;ID&quot; &gt; 1000 and
@@ -29,19 +25,14 @@
 
 <logicalModel id="Projection_1">
   <attributes>
-    <attribute id="FEEDBACK_COMMENT" order="3" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="FEEDBACK_COMMENT" order="2" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="Feedback comment"/>
       <keyMapping columnObjectName="Projection_1" columnName="FEEDBACK_COMMENT"/>
     </attribute>
   </attributes>
   <calculatedAttributes/>
   <baseMeasures>
-    <measure id="ID" order="1" aggregationType="var" measureType="simple">
-      <descriptions defaultDescription="Employee ID"/>
-      <measureMapping columnObjectName="Projection_1" columnName="ID"/>
-      <exceptionAggregationMetadata/>
-    </measure>
-    <measure id="EVALUATION_RATING" order="2" aggregationType="var" measureType="simple">
+    <measure id="EVALUATION_RATING" order="1" aggregationType="var" measureType="simple">
       <descriptions defaultDescription="Evaluation results"/>
       <measureMapping columnObjectName="Projection_1" columnName="EVALUATION_RATING"/>
       <exceptionAggregationMetadata/>

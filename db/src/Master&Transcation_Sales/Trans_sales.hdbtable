@@ -1,0 +1,1 @@
+COLUMN TABLE Trans_sales(TransactionID BIGINT, ProductID BIGINT, Quantity DEC(20,3), SaleDate DATE);

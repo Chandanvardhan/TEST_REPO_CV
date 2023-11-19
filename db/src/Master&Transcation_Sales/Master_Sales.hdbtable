@@ -1,0 +1,1 @@
+COLUMN TABLE Master_sales (ProductID BIGINT, ProductName varchar(221), Category VARCHAR(221), UnitPrice DEC(20,3))

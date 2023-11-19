@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="Join_M&amp;S" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="M&amp;S.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="MASTER_SALES">
+    <resourceUri>MASTER_SALES</resourceUri>
+  </DataSource>
+  <DataSource id="TRANS_SALES">
+    <resourceUri>TRANS_SALES</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="PRODUCTID" aggregationType="sum"/>
+      <viewAttribute id="PRODUCTNAME"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="SALEDATE"/>
+      <viewAttribute hidden="true" id="JOIN$PRODUCTID$PRODUCTID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MASTER_SALES">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTID" source="PRODUCTID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTNAME" source="PRODUCTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY" source="CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCTID$PRODUCTID" source="PRODUCTID"/>
+    </input>
+    <input node="TRANS_SALES">
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALEDATE" source="SALEDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCTID$PRODUCTID" source="PRODUCTID"/>
+    </input>
+    <joinAttribute name="JOIN$PRODUCTID$PRODUCTID"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:WindowFunctionView" id="WindowFunction_1">
+    <viewAttributes>
+      <viewAttribute id="PRODUCTID" aggregationType="sum"/>
+      <viewAttribute id="PRODUCTNAME"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="SALEDATE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Join_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTID" source="PRODUCTID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTNAME" source="PRODUCTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY" source="CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALEDATE" source="SALEDATE"/>
+    </input>
+    <function name="RANK"/>
+    <windowFunctionResultColumn datatype="BIGINT">Highest_Sale</windowFunctionResultColumn>
+    <orderAttributes>
+      <orderAttribute direction="DESC">QUANTITY</orderAttribute>
+      <orderAttribute direction="ASC">PRODUCTID</orderAttribute>
+    </orderAttributes>
+    <partitionAttributes/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="WindowFunction_1">
+  <attributes>
+    <attribute id="PRODUCTNAME" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PRODUCTNAME"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="PRODUCTNAME"/>
+    </attribute>
+    <attribute id="CATEGORY" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CATEGORY"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="CATEGORY"/>
+    </attribute>
+    <attribute id="SALEDATE" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALEDATE"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="SALEDATE"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="PRODUCTID" order="1" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PRODUCTID"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="PRODUCTID"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="PRODUCTNAME"/>
+        <attribute attributeName="CATEGORY"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="QUANTITY" order="3" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="QUANTITY"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="QUANTITY"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="PRODUCTNAME"/>
+        <attribute attributeName="CATEGORY"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  
+    <measure id="Highest_Sale" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="Highest_Sale"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="Highest_Sale"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="CATEGORY"/>
+        <attribute attributeName="PRODUCTNAME"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="90" y="322"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="MASTER_SALES" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="172"/>
+    </shape>
+    <shape modelObjectName="TRANS_SALES" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="175"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="WindowFunction_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="95" y="203"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

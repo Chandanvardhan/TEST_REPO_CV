@@ -1,0 +1,1 @@
+COLUMN TABLE Master_Shipping (ProductID BIGINT, ProductName varchar(221), Category VARCHAR(221));

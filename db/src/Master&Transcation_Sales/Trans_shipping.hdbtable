@@ -1,0 +1,1 @@
+COLUMN TABLE Trans_shipping(TransactionID BIGINT, ProductID BIGINT, Quantity DEC(20,3), ShippedDate DATE);
