@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="Fsales" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" propagateInstantiation="true">
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="RANK&amp;WINDOW" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" propagateInstantiation="true">
 <descriptions defaultDescription="Fsales.hdbcalculationview"/>
 <localVariables/>
 <variableMappings/>
@@ -43,10 +43,12 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="Projection_1"/>
-    <rankingFilter type="DENSE_RANK" offset="0" offsetReference="BACK" dynamicPartitionAttributes="false">
+    <rankingFilter type="RANK" offset="0" offsetReference="BACK" dynamicPartitionAttributes="false">
       <order byViewAttributeName="Total_Sales" direction="DESC"/>
       <order byViewAttributeName="UNITPRICE" direction="DESC"/>
-      <rankThreshold/>
+      <rankThreshold>
+        <value>100</value>
+      </rankThreshold>
       <rankViewAttributeName>Rank_Column</rankViewAttributeName>
     </rankingFilter>
   </calculationView>
@@ -79,8 +81,8 @@
     <function name="RANK"/>
     <windowFunctionResultColumn datatype="DOUBLE">Rank</windowFunctionResultColumn>
     <orderAttributes>
+      <orderAttribute direction="DESC">Rank_Column</orderAttribute>
       <orderAttribute direction="DESC">Total_Sales</orderAttribute>
-      <orderAttribute direction="DESC">UNITPRICE</orderAttribute>
     </orderAttributes>
     <partitionAttributes/>
   </calculationView>
@@ -144,6 +146,9 @@
   </baseMeasures>
   <calculatedMeasures/>
   <restrictedMeasures/>
+  <sortAttributes>
+    <sortAttribute id="Rank_Column" direction="DESC"/>
+  </sortAttributes>
   <localDimensions/>
 </logicalModel>
 <layout>

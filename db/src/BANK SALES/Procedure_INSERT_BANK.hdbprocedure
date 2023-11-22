@@ -1,0 +1,8 @@
+PROCEDURE "Procedure_INSERT_BANK"( out name varchar(221))
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA "CV_NEW_HDI_DB_1"
+   READS SQL DATA AS
+BEGIN
+   name := 'chandan';
+END

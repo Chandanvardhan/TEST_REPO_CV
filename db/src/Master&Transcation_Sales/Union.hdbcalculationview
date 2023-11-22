@@ -16,8 +16,8 @@
   <calculationView xsi:type="Calculation:UnionView" id="Union_1">
     <viewAttributes/>
     <calculatedViewAttributes/>
-    <input node="MASTER_SHIPPING"/>
-    <input node="MASTER_SALES"/>
+    <input node="MASTER_SHIPPING" emptyUnionBehavior="NO_ROW"/>
+    <input node="MASTER_SALES" emptyUnionBehavior="NO_ROW"/>
   </calculationView>
 </calculationViews>
 <logicalModel id="Union_1">
@@ -37,7 +37,7 @@
     </shape>
   
     <shape expanded="true" modelObjectName="Union_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="91" y="212"/>
+      <upperLeftCorner x="81" y="212"/>
       <rectangleSize height="30" width="160"/>
     </shape>
   </shapes>

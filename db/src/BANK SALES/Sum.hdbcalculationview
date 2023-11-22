@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="Sum" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="Sum.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="Bank">
+    <resourceUri>Bank</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="AGE"/>
+      <viewAttribute id="C_ID"/>
+      <viewAttribute id="NAME"/>
+      <viewAttribute id="SURNAME"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="REGION"/>
+      <viewAttribute id="ROLES"/>
+      <viewAttribute id="D_JOIN"/>
+      <viewAttribute id="BALANCE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Bank">
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="AGE" null="true"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="C_ID" null="true"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="NAME" null="true"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="SURNAME" null="true"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="GENDER" null="true"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="REGION" null="true"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="ROLES" null="true"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="D_JOIN" null="true"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:AggregationView" id="Aggregation_1">
+    <viewAttributes>
+      <viewAttribute id="AGE" aggregationType="sum"/>
+      <viewAttribute id="C_ID" aggregationType="sum"/>
+      <viewAttribute id="NAME"/>
+      <viewAttribute id="SURNAME"/>
+      <viewAttribute id="GENDER"/>
+      <viewAttribute id="REGION"/>
+      <viewAttribute id="ROLES"/>
+      <viewAttribute id="D_JOIN"/>
+      <viewAttribute id="BALANCE" aggregationType="sum"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="Projection_1"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Aggregation_1">
+  <attributes/>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="BALANCE" order="1" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="BALANCE"/>
+      <measureMapping columnObjectName="Aggregation_1" columnName="BALANCE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="100" y="105"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="266"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Aggregation_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="184"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

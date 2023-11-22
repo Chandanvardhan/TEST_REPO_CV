@@ -38,7 +38,7 @@
       <keyCalculation datatype="INTEGER" expressionLanguage="SQL">
         <formula>'1'</formula>
       </keyCalculation>
-      </calculatedAttribute>
+    </calculatedAttribute>
   </calculatedAttributes>
   <baseMeasures/>
   <calculatedMeasures/>
@@ -58,7 +58,7 @@
       <upperLeftCorner x="40" y="85"/>
     </shape>
     <shape expanded="true" modelObjectName="Union_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-189" y="275"/>
+      <upperLeftCorner x="-134" y="291"/>
       <rectangleSize height="30" width="160"/>
     </shape>
   

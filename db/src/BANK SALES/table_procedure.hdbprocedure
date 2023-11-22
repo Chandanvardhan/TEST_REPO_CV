@@ -1,0 +1,11 @@
+PROCEDURE Table_new ( IN Productid bigint, out id TABLE (productname varchar(221), c_ID BIGINT))
+   --LANGUAGE SQLSCRIPT
+   --SQL SECURITY INVOKER
+   --DEFAULT SCHEMA "CV_NEW_HDI_DB_1"
+   --READS SQL DATA 
+   AS
+   
+BEGIN
+DECLARE productname VARCHAR(221)
+    id = SELECT productname,productid from "MASTER_SALES" where "PRODUCTNAME" = :productname;
+END;
