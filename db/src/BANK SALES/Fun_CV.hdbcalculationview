@@ -3,21 +3,16 @@
 <descriptions defaultDescription="procdure_CV.hdbcalculationview"/>
 <localVariables/>
 <variableMappings/>
-<dataSources>
-  <DataSource id="Bank">
-    <resourceUri>Bank</resourceUri>
-  </DataSource>
-</dataSources>
+<dataSources/>
 <snapshotProcedures/>
 <calculationViews>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
     <viewAttributes/>
     <calculatedViewAttributes/>
   </calculationView>
-  <calculationView xsi:type="Calculation:TableFunctionView" id="TableFunction_1">
+  <calculationView xsi:type="Calculation:NonEquiJoinView" id="NonEquiJoin_1">
     <viewAttributes/>
     <calculatedViewAttributes/>
-    <input node="Bank"/>
   </calculationView>
 </calculationViews>
 <logicalModel id="Projection_1">
@@ -38,9 +33,8 @@
       <upperLeftCorner x="100" y="220"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-  
-    <shape expanded="false" modelObjectName="TableFunction_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-208" y="230"/>
+    <shape expanded="true" modelObjectName="NonEquiJoin_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-85" y="315"/>
       <rectangleSize height="30" width="160"/>
     </shape>
   </shapes>

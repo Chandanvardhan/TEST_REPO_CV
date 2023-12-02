@@ -47,28 +47,19 @@
     <viewAttributes>
       <viewAttribute id="PRODUCTID" aggregationType="sum"/>
       <viewAttribute id="PRODUCTNAME"/>
-      <viewAttribute id="CATEGORY"/>
       <viewAttribute id="UNITPRICE" aggregationType="sum"/>
-      <viewAttribute id="Cat_Pur"/>
-      <viewAttribute id="CATEGORY_1"/>
-    </viewAttributes>
+      <viewAttribute id="Cat_Pur"/></viewAttributes>
     <calculatedViewAttributes/>
     <input node="Projection_1" emptyUnionBehavior="NO_ROW">
       <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTID" source="PRODUCTID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTNAME" source="PRODUCTNAME"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY" source="CATEGORY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="UNITPRICE" source="UNITPRICE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="Cat_Pur" source="CATEGORY"/>
-      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="CATEGORY_1" null="true" value=""/>
-    </input>
+      <mapping xsi:type="Calculation:AttributeMapping" target="Cat_Pur" source="CATEGORY"/></input>
     <input node="Projection_2" emptyUnionBehavior="NO_ROW">
       <mapping xsi:type="Calculation:ConstantAttributeMapping" target="PRODUCTID" null="true" value=""/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTNAME" source="PRODUCTNAME"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY" source="CATEGORY"/>
       <mapping xsi:type="Calculation:ConstantAttributeMapping" target="UNITPRICE" null="true" value=""/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="Cat_Pur" source="CATEGORY"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY_1" source="CATEGORY"/>
-    </input>
+      <mapping xsi:type="Calculation:AttributeMapping" target="Cat_Pur" source="CATEGORY"/></input>
   </calculationView>
 </calculationViews>
 <logicalModel id="Union_1">
@@ -78,15 +69,7 @@
       <localVariable>VAR_Productname</localVariable>
       <keyMapping columnObjectName="Union_1" columnName="PRODUCTNAME"/>
     </attribute>
-    <attribute id="CATEGORY" order="3" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="CATEGORY"/>
-      <keyMapping columnObjectName="Union_1" columnName="CATEGORY"/>
-    </attribute>
-    <attribute id="CATEGORY_1" order="5" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="CATEGORY_1"/>
-      <keyMapping columnObjectName="Union_1" columnName="CATEGORY_1"/>
-    </attribute>
-    <attribute id="Cat_Pur" order="6" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="Cat_Pur" order="4" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="Cat_Pur"/>
       <keyMapping columnObjectName="Union_1" columnName="Cat_Pur"/>
     </attribute>
@@ -98,7 +81,7 @@
       <measureMapping columnObjectName="Union_1" columnName="PRODUCTID"/>
       <exceptionAggregationMetadata/>
     </measure>
-    <measure id="UNITPRICE" order="4" aggregationType="sum" measureType="simple">
+    <measure id="UNITPRICE" order="3" aggregationType="sum" measureType="simple">
       <descriptions defaultDescription="UNITPRICE"/>
       <measureMapping columnObjectName="Union_1" columnName="UNITPRICE"/>
       <exceptionAggregationMetadata/>

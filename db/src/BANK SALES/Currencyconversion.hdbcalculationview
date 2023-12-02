@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="variable_bank" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
-<descriptions defaultDescription="variable_bank.hdbcalculationview"/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="Currencyconversion" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="Currencyconversion.hdbcalculationview"/>
 <localVariables>
-  <variable id="VAR_1">
+  <variable id="IP_Name" parameter="true">
     <descriptions defaultDescription=""/>
-    <variableProperties datatype="NVARCHAR" length="221" scale="null" defaultValue="">
+    <variableProperties datatype="NVARCHAR" length="221" scale="null" mandatory="true">
       <valueDomain type="AttributeValue">
         <attribute name="NAME"/>
       </valueDomain>
-      <selection type="SingleValue"/>
+      <selection multiLine="true" type="SingleValue"/>
     </variableProperties>
   </variable>
 </localVariables>
@@ -20,7 +20,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="AGE"/>
       <viewAttribute id="C_ID"/>
@@ -30,12 +30,29 @@
       <viewAttribute id="REGION"/>
       <viewAttribute id="ROLES"/>
       <viewAttribute id="D_JOIN"/>
-      <viewAttribute id="BALANCE"/>
+      <viewAttribute id="BALANCE" semanticType="amount" measureType="amount">
+        <fixedCurrency>USD</fixedCurrency>
+        <currencyConversion generateOutputUnitCurrencyAttribute="false" method="ERP" lookup="REGULAR">
+          <client/>
+          <currencyConversionTables rates="HC::TURR" configuration="HC::TURV" prefactors="HC::TURF" notations="HC::TURN" precisions="HC::TURX"/>
+          <outputDataType datatype="DECIMAL" length="20" scale="4"/>
+          <sourceCurrency>
+            <value>USD</value>
+          </sourceCurrency>
+          <erpDecimalShift>true</erpDecimalShift>
+          <targetCurrency>
+            <value>USD</value>
+          </targetCurrency>
+          <referenceDate/>
+        </currencyConversion>
+      </viewAttribute>
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="Bank"/>
+  
+    <filter>&quot;NAME&quot; = $$IP_Name$$ or $$IP_Name$$ = '*'</filter>
   </calculationView>
-  <calculationView xsi:type="Calculation:WindowFunctionView" id="WindowFunction_1">
+  <calculationView xsi:type="Calculation:MinusView" id="Minus_1">
     <viewAttributes>
       <viewAttribute id="AGE" aggregationType="sum"/>
       <viewAttribute id="C_ID" aggregationType="sum"/>
@@ -59,69 +76,54 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="D_JOIN" source="D_JOIN"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="BALANCE" source="BALANCE"/>
     </input>
-    <function name="DENSE_RANK"/>
-    <windowFunctionResultColumn datatype="DECIMAL" length="20" scale="5">Bankbalance</windowFunctionResultColumn>
-    <orderAttributes>
-      <orderAttribute direction="DESC">BALANCE</orderAttribute>
-    </orderAttributes>
-    <partitionAttributes/>
   </calculationView>
-  <calculationView xsi:type="Calculation:RankView" id="Rank_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
     <viewAttributes>
-      <viewAttribute id="AGE" aggregationType="sum"/>
-      <viewAttribute id="C_ID" aggregationType="sum"/>
+      <viewAttribute id="AGE"/>
+      <viewAttribute id="C_ID"/>
       <viewAttribute id="NAME"/>
       <viewAttribute id="SURNAME"/>
       <viewAttribute id="GENDER"/>
       <viewAttribute id="REGION"/>
       <viewAttribute id="ROLES"/>
       <viewAttribute id="D_JOIN"/>
-      <viewAttribute id="BALANCE" aggregationType="sum"/>
-      <viewAttribute id="Bankbalance" aggregationType="sum"/>
+      <viewAttribute id="BALANCE"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="WindowFunction_1"/>
-    <rankingFilter type="RANK" offset="0" offsetReference="FRONT" dynamicPartitionAttributes="true">
-      <partitionViewAttributeName id="C_ID"/>
-      <rankThreshold>
-        <value>500</value>
-      </rankThreshold>
-    </rankingFilter>
+    <input node="Minus_1"/>
   </calculationView>
 </calculationViews>
-<logicalModel id="Rank_1">
+<logicalModel id="Projection_2">
   <attributes>
     <attribute id="NAME" order="3" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="NAME"/>
-      <localVariable>VAR_1</localVariable>
-      <keyMapping columnObjectName="Rank_1" columnName="NAME"/>
+      <keyMapping columnObjectName="Projection_2" columnName="NAME"/>
     </attribute>
     <attribute id="SURNAME" order="4" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="SURNAME"/>
-      <keyMapping columnObjectName="Rank_1" columnName="SURNAME"/>
+      <keyMapping columnObjectName="Projection_2" columnName="SURNAME"/>
     </attribute>
     <attribute id="GENDER" order="5" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="GENDER"/>
-      <keyMapping columnObjectName="Rank_1" columnName="GENDER"/>
+      <keyMapping columnObjectName="Projection_2" columnName="GENDER"/>
     </attribute>
     <attribute id="REGION" order="6" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="REGION"/>
-      <keyMapping columnObjectName="Rank_1" columnName="REGION"/>
+      <keyMapping columnObjectName="Projection_2" columnName="REGION"/>
     </attribute>
     <attribute id="ROLES" order="7" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="ROLES"/>
-      <keyMapping columnObjectName="Rank_1" columnName="ROLES"/>
+      <keyMapping columnObjectName="Projection_2" columnName="ROLES"/>
     </attribute>
     <attribute id="D_JOIN" order="8" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="D_JOIN"/>
-      <keyMapping columnObjectName="Rank_1" columnName="D_JOIN"/>
-    </attribute>
-  </attributes>
+      <keyMapping columnObjectName="Projection_2" columnName="D_JOIN"/>
+    </attribute></attributes>
   <calculatedAttributes/>
   <baseMeasures>
     <measure id="AGE" order="1" aggregationType="sum" measureType="simple">
       <descriptions defaultDescription="AGE"/>
-      <measureMapping columnObjectName="Rank_1" columnName="AGE"/>
+      <measureMapping columnObjectName="Projection_2" columnName="AGE"/>
       <exceptionAggregationMetadata>
         <attribute attributeName="NAME"/>
         <attribute attributeName="SURNAME"/>
@@ -133,7 +135,7 @@
     </measure>
     <measure id="C_ID" order="2" aggregationType="sum" measureType="simple">
       <descriptions defaultDescription="C_ID"/>
-      <measureMapping columnObjectName="Rank_1" columnName="C_ID"/>
+      <measureMapping columnObjectName="Projection_2" columnName="C_ID"/>
       <exceptionAggregationMetadata>
         <attribute attributeName="NAME"/>
         <attribute attributeName="SURNAME"/>
@@ -145,19 +147,7 @@
     </measure>
     <measure id="BALANCE" order="9" aggregationType="sum" measureType="simple">
       <descriptions defaultDescription="BALANCE"/>
-      <measureMapping columnObjectName="Rank_1" columnName="BALANCE"/>
-      <exceptionAggregationMetadata>
-        <attribute attributeName="NAME"/>
-        <attribute attributeName="SURNAME"/>
-        <attribute attributeName="GENDER"/>
-        <attribute attributeName="REGION"/>
-        <attribute attributeName="ROLES"/>
-        <attribute attributeName="D_JOIN"/>
-      </exceptionAggregationMetadata>
-    </measure>
-    <measure id="Bankbalance" order="10" aggregationType="sum" measureType="simple">
-      <descriptions defaultDescription="Bankbalance"/>
-      <measureMapping columnObjectName="Rank_1" columnName="Bankbalance"/>
+      <measureMapping columnObjectName="Projection_2" columnName="BALANCE"/>
       <exceptionAggregationMetadata>
         <attribute attributeName="NAME"/>
         <attribute attributeName="SURNAME"/>
@@ -170,28 +160,26 @@
   </baseMeasures>
   <calculatedMeasures/>
   <restrictedMeasures/>
-  <sortAttributes>
-    <sortAttribute id="Bankbalance" direction="ASC"/>
-  </sortAttributes>
   <localDimensions/>
 </logicalModel>
 <layout>
   <shapes>
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
-      <upperLeftCorner x="40" y="85"/>
+      <upperLeftCorner x="94" y="105"/>
+    
+      <rectangleSize width="160"/>
     </shape>
   
     <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="100" y="390"/>
+      <upperLeftCorner x="94" y="343"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-  
-    <shape expanded="true" modelObjectName="WindowFunction_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="100" y="274"/>
+    <shape expanded="true" modelObjectName="Minus_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="101" y="247"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-    <shape expanded="true" modelObjectName="Rank_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="100" y="194"/>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="101" y="176"/>
       <rectangleSize height="30" width="160"/>
     </shape>
   </shapes>

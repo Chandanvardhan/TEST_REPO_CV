@@ -1,0 +1,8 @@
+procedure cursors()
+as
+begin
+declare cursor names_returing with hold for select "NAME" from "Bank";
+--open names_returning;
+--roolback;
+--close names_returning;
+end

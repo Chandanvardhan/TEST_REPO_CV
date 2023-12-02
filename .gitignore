@@ -1,1 +1,5 @@
 mta_archives/
+
+# auto generated wildcard
+db/.env
+db/src/Master&Transcation_Sales/starjoin.hdbcalculationview

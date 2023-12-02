@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="Join" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="Join.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="VBAP">
+    <resourceUri>VBAP</resourceUri>
+  </DataSource>
+  <DataSource id="MARA">
+    <resourceUri>MARA</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="VBELN"/>
+      <viewAttribute id="POSNR"/>
+      <viewAttribute id="MATNR"/>
+      <viewAttribute id="PSTYV"/>
+      <viewAttribute id="WERKS"/>
+      <viewAttribute id="MEINS"/>
+      <viewAttribute id="MENGE"/>
+      <viewAttribute id="NETPR"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBAP"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="MATNR"/>
+      <viewAttribute id="MTART"/>
+      <viewAttribute id="MAKTX"/>
+      <viewAttribute id="MEINS"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MARA"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_N" joinType="inner" optimizeJoinColumns="false">
+    <viewAttributes>
+      <viewAttribute id="VBELN" aggregationType="sum"/>
+      <viewAttribute id="POSNR" aggregationType="sum"/>
+      <viewAttribute id="MATNR"/>
+      <viewAttribute id="PSTYV"/>
+      <viewAttribute id="WERKS" aggregationType="sum"/>
+      <viewAttribute id="MEINS"/>
+      <viewAttribute id="MENGE" aggregationType="sum"/>
+      <viewAttribute id="NETPR" aggregationType="sum"/>
+      <viewAttribute id="MAKTX"/>
+      <viewAttribute hidden="true" id="JOIN$MATNR$MATNR"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="MAKTX" source="MAKTX"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$MATNR$MATNR" source="MATNR"/>
+    </input>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="VBELN" source="VBELN"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="POSNR" source="POSNR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATNR" source="MATNR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PSTYV" source="PSTYV"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WERKS" source="WERKS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MEINS" source="MEINS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MENGE" source="MENGE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NETPR" source="NETPR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$MATNR$MATNR" source="MATNR"/>
+    </input>
+    <joinAttribute name="JOIN$MATNR$MATNR"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="MATNR" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MATNR"/>
+      <keyMapping columnObjectName="Join_1" columnName="MATNR"/>
+    </attribute>
+    <attribute id="PSTYV" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PSTYV"/>
+      <keyMapping columnObjectName="Join_1" columnName="PSTYV"/>
+    </attribute>
+    <attribute id="MEINS" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MEINS"/>
+      <keyMapping columnObjectName="Join_1" columnName="MEINS"/>
+    </attribute>
+    <attribute id="MAKTX" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MAKTX"/>
+      <keyMapping columnObjectName="Join_1" columnName="MAKTX"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="VBELN" order="1" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="VBELN"/>
+      <measureMapping columnObjectName="Join_1" columnName="VBELN"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="MATNR"/>
+        <attribute attributeName="PSTYV"/>
+        <attribute attributeName="MEINS"/>
+        <attribute attributeName="MAKTX"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="VBELN_1" order="2" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="VBELN"/>
+      <measureMapping columnObjectName="Join_1" columnName="VBELN"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="MATNR"/>
+        <attribute attributeName="PSTYV"/>
+        <attribute attributeName="MEINS"/>
+        <attribute attributeName="MAKTX"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="POSNR" order="3" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="POSNR"/>
+      <measureMapping columnObjectName="Join_1" columnName="POSNR"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="MATNR"/>
+        <attribute attributeName="PSTYV"/>
+        <attribute attributeName="MEINS"/>
+        <attribute attributeName="MAKTX"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="WERKS" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="WERKS"/>
+      <measureMapping columnObjectName="Join_1" columnName="WERKS"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="MATNR"/>
+        <attribute attributeName="PSTYV"/>
+        <attribute attributeName="MEINS"/>
+        <attribute attributeName="MAKTX"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="MENGE" order="8" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="MENGE"/>
+      <measureMapping columnObjectName="Join_1" columnName="MENGE"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="MATNR"/>
+        <attribute attributeName="PSTYV"/>
+        <attribute attributeName="MEINS"/>
+        <attribute attributeName="MAKTX"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="NETPR" order="9" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="NETPR"/>
+      <measureMapping columnObjectName="Join_1" columnName="NETPR"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-36" y="277"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="260" y="277"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="179"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

@@ -1,0 +1,19 @@
+VIEW bank (
+  C_id,
+  Name,
+  Surname,
+  GENDER,
+  REGION,
+) 
+AS
+SELECT C_ID,
+  Name,
+  Surname,
+  GENDER,
+  REGION,
+FROM "SALARIES_ANONYMIZED"
+WITH READ ONLY
+WITH ANONYMIZATION (ALGORITHM 'DIFFERENTIAL_PRIVACY'
+  PARAMETERS '{"data_change_strategy": "qualified"}'
+  COLUMN ID PARAMETERS '{"is_sequence": true}'
+  COLUMN SALARY PARAMETERS '{"is_sensitive":true, "epsilon":0.1, "sensitivity":15000}')

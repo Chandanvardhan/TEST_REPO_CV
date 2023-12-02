@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="Star_working" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="Star_working.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="MASTER_SHIPPING">
+    <resourceUri>MASTER_SHIPPING</resourceUri>
+  </DataSource>
+  <DataSource id="MASTER_SALES">
+    <resourceUri>MASTER_SALES</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="PRODUCTID"/>
+      <viewAttribute id="PRODUCTNAME"/>
+      <viewAttribute id="CATEGORY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MASTER_SHIPPING"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="PRODUCTID"/>
+      <viewAttribute id="PRODUCTNAME"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="UNITPRICE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MASTER_SALES"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="PRODUCTID" aggregationType="sum"/>
+      <viewAttribute id="PRODUCTNAME"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="PRODUCTID_1" aggregationType="sum"/>
+      <viewAttribute id="PRODUCTNAME_1"/>
+      <viewAttribute id="CATEGORY_1"/>
+      <viewAttribute id="UNITPRICE" aggregationType="sum"/>
+      <viewAttribute hidden="true" id="JOIN$PRODUCTID$PRODUCTID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTID" source="PRODUCTID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTNAME" source="PRODUCTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY" source="CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCTID$PRODUCTID" source="PRODUCTID"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTID_1" source="PRODUCTID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCTNAME_1" source="PRODUCTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY_1" source="CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="UNITPRICE" source="UNITPRICE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCTID$PRODUCTID" source="PRODUCTID"/>
+    </input>
+    <joinAttribute name="JOIN$PRODUCTID$PRODUCTID"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="PRODUCTNAME" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PRODUCTNAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="PRODUCTNAME"/>
+    </attribute>
+    <attribute id="CATEGORY" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CATEGORY"/>
+      <keyMapping columnObjectName="Join_1" columnName="CATEGORY"/>
+    </attribute>
+    <attribute id="PRODUCTNAME_1" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PRODUCTNAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="PRODUCTNAME_1"/>
+    </attribute>
+    <attribute id="CATEGORY_1" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CATEGORY"/>
+      <keyMapping columnObjectName="Join_1" columnName="CATEGORY_1"/>
+    </attribute>
+    <attribute id="PRODUCTID$local">
+      <descriptions defaultDescription="PRODUCTID"/>
+      <keyMapping columnObjectName="Join_1" columnName="PRODUCTID"/>
+    </attribute>
+    <attribute id="PRODUCTID_1$local">
+      <descriptions defaultDescription="PRODUCTID"/>
+      <keyMapping columnObjectName="Join_1" columnName="PRODUCTID_1"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="UNITPRICE" order="5" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="UNITPRICE"/>
+      <measureMapping columnObjectName="Join_1" columnName="PRODUCTID_1"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="TRANSACTIONID" dimensionUri="TRANS_SALES"/>
+        <attribute attributeName="PRODUCTID" dimensionUri="TRANS_SALES"/>
+        <attribute attributeName="QUANTITY" dimensionUri="TRANS_SALES"/>
+        <attribute attributeName="SALEDATE" dimensionUri="TRANS_SALES"/>
+        <attribute attributeName="PRODUCTNAME"/>
+        <attribute attributeName="CATEGORY"/>
+        <attribute attributeName="PRODUCTNAME_1"/>
+        <attribute attributeName="CATEGORY_1"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="PRODUCTID_1" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PRODUCTID"/>
+      <measureMapping columnObjectName="Join_1" columnName="PRODUCTID_1"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="TRANSACTIONID" dimensionUri="TRANS_SALES"/>
+        <attribute attributeName="PRODUCTID" dimensionUri="TRANS_SALES"/>
+        <attribute attributeName="QUANTITY" dimensionUri="TRANS_SALES"/>
+        <attribute attributeName="SALEDATE" dimensionUri="TRANS_SALES"/>
+        <attribute attributeName="PRODUCTNAME"/>
+        <attribute attributeName="CATEGORY"/>
+        <attribute attributeName="PRODUCTNAME_1"/>
+        <attribute attributeName="CATEGORY_1"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+  <sharedDimensions>
+    <logicalJoin associatedObjectUri="TRANS_SALES">
+      <attributes>
+        <attributeRef>PRODUCTID$local</attributeRef>
+        <attributeRef>PRODUCTID_1$local</attributeRef>
+      </attributes>
+      <associatedAttributeNames>
+        <attributeName>PRODUCTID</attributeName>
+        <attributeName>PRODUCTID</attributeName>
+      </associatedAttributeNames>
+      <properties cardinality="CN_N" joinType="leftOuter" joinOperator="Equal"/>
+      <associatedAttributeFeatures>
+        <attributeReference alias="PRODUCTID_2" attributeName="PRODUCTID"/>
+      </associatedAttributeFeatures>
+    </logicalJoin>
+  </sharedDimensions>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="100" y="105"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-143" y="337"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="260" y="320"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="204"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="136.0234375"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="136.0234375"/>
+    </shape>
+    <shape modelObjectName="Join_1" modelObjectNameSpace="StarJoinViewNodeInput" modelObjectType="repository">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="TRANS_SALES" modelObjectNameSpace="StarJoinViewNodeSharedCV" modelObjectType="repository">
+      <upperLeftCorner x="358" y="-50"/>
+      <rectangleSize width="175.8369140625"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
