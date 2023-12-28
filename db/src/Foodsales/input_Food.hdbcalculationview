@@ -2,13 +2,14 @@
 <Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="input_Food" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
 <descriptions defaultDescription="input_Food.hdbcalculationview"/>
 <localVariables>
-  <variable id="IP_DATE" parameter="true">
+  <variable id="IP_Product" parameter="true">
     <descriptions defaultDescription=""/>
-    <variableProperties datatype="NVARCHAR" length="221" scale="null" mandatory="false">
+    <variableProperties datatype="NVARCHAR" length="221" mandatory="true">
       <valueDomain type="AttributeValue">
-        <attribute name="DATES"/>
+        <externalLikeStructureName>TRANSFOOD</externalLikeStructureName>
+        <externalLikeElementName>PRODUCT</externalLikeElementName>
       </valueDomain>
-      <selection multiLine="false" type="SingleValue"/>
+      <selection multiLine="true" type="SingleValue"/>
     </variableProperties>
   </variable>
 </localVariables>
@@ -33,8 +34,7 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="TRANSFOOD"/>
-  
-    <filter>&quot;DATES&quot; = '$$IP_DATE$$' or '$$IP_DATE$$' = '*'</filter>
+    <filter>&quot;PRODUCT&quot; in ($$IP_Product$$)</filter>
   </calculationView>
 </calculationViews>
 <logicalModel id="Projection_1">

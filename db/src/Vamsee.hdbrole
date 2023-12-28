@@ -1,5 +1,13 @@
 {
   "role": {
-    "name": "Vamsee"
+    "name": "DBADMIN",
+    "schema_roles": [
+      {
+        "schema_reference": "BROKER_USER",
+        "names": [
+          "STUDIO_ACCESS_ROLE"
+        ]
+      }
+    ]
   }
 }

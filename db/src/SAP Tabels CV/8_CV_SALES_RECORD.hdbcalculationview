@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="8_CV_SALES_RECORD" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" application="BAS" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="8_CV_SALES_RECORD.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="VBAP1">
+    <resourceUri>VBAP1</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="ITEMNUMBER"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="NETPRICE"/>
+      <viewAttribute id="ITEMVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBAP1"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:RankView" id="Rank_1">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="ITEMNUMBER" aggregationType="sum"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="NETPRICE" aggregationType="sum"/>
+      <viewAttribute id="ITEMVALUE" aggregationType="sum"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1"/>
+    <rankingFilter type="DENSE_RANK" offsetReference="FRONT" dynamicPartitionAttributes="false">
+      <order byViewAttributeName="QUANTITY" direction="DESC"/>
+      <rankThreshold>
+        <value>5</value>
+      </rankThreshold>
+      <rankViewAttributeName>Top_5_Sold</rankViewAttributeName>
+    </rankingFilter>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Rank_1">
+  <attributes>
+    <attribute id="SALESDOCUMENT" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESDOCUMENT"/>
+      <keyMapping columnObjectName="Rank_1" columnName="SALESDOCUMENT"/>
+    </attribute>
+    <attribute id="ITEMNUMBER" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ITEMNUMBER"/>
+      <keyMapping columnObjectName="Rank_1" columnName="ITEMNUMBER"/>
+    </attribute>
+    <attribute id="MATERIALNUMBER" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MATERIALNUMBER"/>
+      <keyMapping columnObjectName="Rank_1" columnName="MATERIALNUMBER"/>
+    </attribute>
+    <attribute id="NETPRICE" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NETPRICE"/>
+      <keyMapping columnObjectName="Rank_1" columnName="NETPRICE"/>
+    </attribute>
+    <attribute id="ITEMVALUE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ITEMVALUE"/>
+      <keyMapping columnObjectName="Rank_1" columnName="ITEMVALUE"/>
+    </attribute>
+    <attribute id="Top_5_Sold" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Top_5_Sold"/>
+      <keyMapping columnObjectName="Rank_1" columnName="Top_5_Sold"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="QUANTITY" order="4" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="QUANTITY"/>
+      <measureMapping columnObjectName="Rank_1" columnName="QUANTITY"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <sortAttributes>
+    <sortAttribute id="Top_5_Sold" direction="ASC"/>
+  </sortAttributes>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="90" y="302"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Rank_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="90" y="216"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

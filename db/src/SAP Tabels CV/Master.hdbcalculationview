@@ -1,0 +1,997 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="Master" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" application="BAS" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="Master.hdbcalculationview"/>
+<localVariables>
+  <variable id="IP_Customer_Name" parameter="true">
+    <descriptions defaultDescription=""/>
+    <variableProperties datatype="NVARCHAR" length="255" mandatory="false" defaultValue="*">
+      <valueDomain type="AttributeValue">
+        <externalLikeStructureName>BP0001</externalLikeStructureName>
+        <externalLikeElementName>CUSTOMERNAME</externalLikeElementName>
+      </valueDomain>
+      <selection multiLine="true" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+
+  <variable id="IP_Material_Number" parameter="true">
+    <descriptions defaultDescription=""/>
+    <variableProperties datatype="NVARCHAR" length="30" mandatory="false" defaultValue="*">
+      <valueDomain type="empty"/>
+      <selection multiLine="true" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="Date_Range">
+    <descriptions defaultDescription="Year"/>
+    <variableProperties datatype="DATE" length="10" mandatory="true">
+      <valueDomain type="AttributeValue">
+        <attribute name="DOCDATE"/>
+      </valueDomain>
+      <selection multiLine="true" type="Range"/>
+      <defaultRange operator="EQ" including="true"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="1_3_CV_SALE_RECORD">
+    <resourceUri>1_3_CV_SALE_RECORD</resourceUri>
+  </DataSource>
+  <DataSource id="BP0001">
+    <resourceUri>BP0001</resourceUri>
+  </DataSource>
+  <DataSource id="VBRP1">
+    <resourceUri>VBRP1</resourceUri>
+  </DataSource>
+  <DataSource id="MARA2">
+    <resourceUri>MARA2</resourceUri>
+  </DataSource>
+  <DataSource id="VBAP1">
+    <resourceUri>VBAP1</resourceUri>
+  </DataSource>
+  <DataSource id="LIKP1">
+    <resourceUri>LIKP1</resourceUri>
+  </DataSource>
+  <DataSource id="9_CV_SALES_RECORD">
+    <resourceUri>9_CV_SALES_RECORD</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="1_3_CV_SALE_RECORD"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="ADDRESS"/>
+      <viewAttribute id="CITY"/>
+      <viewAttribute id="COUNTRY"/>
+      <viewAttribute id="EMAIL"/>
+      <viewAttribute id="PHONE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="BP0001"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_5">
+    <viewAttributes>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="BILLINGITEM"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="NETPRICE"/>
+      <viewAttribute id="TAXCODE"/>
+      <viewAttribute id="REVENUEACCOUNT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBRP1"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_6" filterExpressionLanguage="SQL">
+    <viewAttributes>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="MATERIALDESCRIPTION"/>
+      <viewAttribute id="MATERIALTYPE"/>
+      <viewAttribute id="MATERIALGROUP"/>
+      <viewAttribute id="BASEUNIT"/>
+      <viewAttribute id="PRICE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MARA2"/>
+    <filter>(&quot;MATERIALNUMBER&quot; in ($$IP_Material_Number$$)) or ($$IP_Material_Number$$ ='*')</filter>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_7">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="ITEMNUMBER"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="NETPRICE"/>
+      <viewAttribute id="ITEMVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBAP1"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_8">
+    <viewAttributes>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="LIKP1"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_3" cardinality="CN_N" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="BILLINGITEM" aggregationType="sum"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="MATERIALDESCRIPTION"/>
+      <viewAttribute id="MATERIALTYPE"/>
+      <viewAttribute hidden="true" id="JOIN$MATERIALNUMBER$MATERIALNUMBER"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_5">
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDOCUMENT" source="BILLINGDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGITEM" source="BILLINGITEM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALNUMBER" source="MATERIALNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$MATERIALNUMBER$MATERIALNUMBER" source="MATERIALNUMBER"/>
+    </input>
+    <input node="Projection_6">
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALDESCRIPTION" source="MATERIALDESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALTYPE" source="MATERIALTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$MATERIALNUMBER$MATERIALNUMBER" source="MATERIALNUMBER"/>
+    </input>
+    <joinAttribute name="JOIN$MATERIALNUMBER$MATERIALNUMBER"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_6" cardinality="CN_N" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute hidden="true" id="JOIN$SALESDOCUMENT$SALESDOCUMENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes>
+      <calculatedViewAttribute id="CC_Delay_Delivery_Days" datatype="NVARCHAR" length="13" expressionLanguage="SQL">
+        <formula>DAYS_BETWEEN(&quot;DOCDATE&quot;, &quot;DELIVERYDATE&quot;)</formula>
+      </calculatedViewAttribute>
+    </calculatedViewAttributes>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESORG" source="SALESORG"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISTCHANNEL" source="DISTCHANNEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCDATE" source="DOCDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALESDOCUMENT$SALESDOCUMENT" source="SALESDOCUMENT"/>
+    </input>
+    <input node="Projection_8">
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYDATE" source="DELIVERYDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYSTATUS" source="DELIVERYSTATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALESDOCUMENT$SALESDOCUMENT" source="SALESDOCUMENT"/>
+    </input>
+    <joinAttribute name="JOIN$SALESDOCUMENT$SALESDOCUMENT"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_5" cardinality="CN_N" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute id="CC_Delay_Delivery_Days"/>
+      <viewAttribute id="ITEMVALUE"/>
+      <viewAttribute hidden="true" id="JOIN$SALESDOCUMENT$SALESDOCUMENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Join_6">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESORG" source="SALESORG"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISTCHANNEL" source="DISTCHANNEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCDATE" source="DOCDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYDATE" source="DELIVERYDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYSTATUS" source="DELIVERYSTATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CC_Delay_Delivery_Days" source="CC_Delay_Delivery_Days"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALESDOCUMENT$SALESDOCUMENT" source="SALESDOCUMENT"/>
+    </input>
+    <input node="Projection_7">
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ITEMVALUE" source="ITEMVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALESDOCUMENT$SALESDOCUMENT" source="SALESDOCUMENT"/>
+    </input>
+    <joinAttribute name="JOIN$SALESDOCUMENT$SALESDOCUMENT"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute id="CC_Delay_Delivery_Days"/>
+      <viewAttribute id="ITEMVALUE"/>
+      <viewAttribute hidden="true" id="JOIN$CUSTOMERNUMBER$BUSINESSPARTNER"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Join_5">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESORG" source="SALESORG"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISTCHANNEL" source="DISTCHANNEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCDATE" source="DOCDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYDATE" source="DELIVERYDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYSTATUS" source="DELIVERYSTATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CC_Delay_Delivery_Days" source="CC_Delay_Delivery_Days"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ITEMVALUE" source="ITEMVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUSTOMERNUMBER$BUSINESSPARTNER" source="CUSTOMERNUMBER"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNAME" source="CUSTOMERNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BUSINESSPARTNER" source="BUSINESSPARTNER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUSTOMERNUMBER$BUSINESSPARTNER" source="BUSINESSPARTNER"/>
+    </input>
+    <joinAttribute name="JOIN$CUSTOMERNUMBER$BUSINESSPARTNER"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_2" cardinality="CN_N" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="TOTALNETVALUE_1" aggregationType="sum"/>
+      <viewAttribute id="PAYMENTTERMS"/>
+      <viewAttribute id="BILLTOPARTY"/>
+      <viewAttribute id="BILLINGDATE"/>
+      <viewAttribute id="TAXAMOUNT" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute id="CC_Delay_Delivery_Days"/>
+      <viewAttribute id="ITEMVALUE"/>
+      <viewAttribute hidden="true" id="JOIN$SALESDOCUMENT$SALESDOCUMENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="9_CV_SALES_RECORD">
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDOCUMENT" source="BILLINGDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE_1" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAYMENTTERMS" source="PAYMENTTERMS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLTOPARTY" source="BILLTOPARTY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDATE" source="BILLINGDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TAXAMOUNT" source="TAXAMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALESDOCUMENT$SALESDOCUMENT" source="SALESDOCUMENT"/>
+    </input>
+    <input node="Join_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESORG" source="SALESORG"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISTCHANNEL" source="DISTCHANNEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCDATE" source="DOCDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNAME" source="CUSTOMERNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BUSINESSPARTNER" source="BUSINESSPARTNER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYDATE" source="DELIVERYDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYSTATUS" source="DELIVERYSTATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CC_Delay_Delivery_Days" source="CC_Delay_Delivery_Days"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ITEMVALUE" source="ITEMVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALESDOCUMENT$SALESDOCUMENT" source="SALESDOCUMENT"/>
+    </input>
+    <joinAttribute name="JOIN$SALESDOCUMENT$SALESDOCUMENT"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:AggregationView" id="Aggregation_1" filterExpressionLanguage="SQL">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="PAYMENTTERMS"/>
+      <viewAttribute id="BILLTOPARTY"/>
+      <viewAttribute id="BILLINGDATE"/>
+    
+      <viewAttribute id="TAXAMOUNT" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+    
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute id="CC_Delay_Delivery_Days"/>
+    
+      <viewAttribute id="ITEMVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="Join_2"/>
+    <filter>(&quot;CUSTOMERNAME&quot; in ($$IP_Customer_Name$$)) or ($$IP_Customer_Name$$ ='*')</filter>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_4" cardinality="CN_N" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="PAYMENTTERMS"/>
+      <viewAttribute id="BILLTOPARTY" aggregationType="sum"/>
+      <viewAttribute id="BILLINGDATE"/>
+      <viewAttribute id="TAXAMOUNT" aggregationType="sum"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="MATERIALDESCRIPTION"/>
+      <viewAttribute id="MATERIALTYPE"/>
+      <viewAttribute id="BILLINGITEM" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute id="CC_Delay_Delivery_Days"/>
+      <viewAttribute id="ITEMVALUE"/>
+      <viewAttribute hidden="true" id="JOIN$BILLINGDOCUMENT$BILLINGDOCUMENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Join_3">
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALNUMBER" source="MATERIALNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALDESCRIPTION" source="MATERIALDESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALTYPE" source="MATERIALTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGITEM" source="BILLINGITEM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$BILLINGDOCUMENT$BILLINGDOCUMENT" source="BILLINGDOCUMENT"/>
+    </input>
+    <input node="Aggregation_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESORG" source="SALESORG"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISTCHANNEL" source="DISTCHANNEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCDATE" source="DOCDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNAME" source="CUSTOMERNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BUSINESSPARTNER" source="BUSINESSPARTNER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDOCUMENT" source="BILLINGDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAYMENTTERMS" source="PAYMENTTERMS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLTOPARTY" source="BILLTOPARTY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDATE" source="BILLINGDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TAXAMOUNT" source="TAXAMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYDATE" source="DELIVERYDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYSTATUS" source="DELIVERYSTATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CC_Delay_Delivery_Days" source="CC_Delay_Delivery_Days"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ITEMVALUE" source="ITEMVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$BILLINGDOCUMENT$BILLINGDOCUMENT" source="BILLINGDOCUMENT"/>
+    </input>
+    <joinAttribute name="JOIN$BILLINGDOCUMENT$BILLINGDOCUMENT"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_4">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="PAYMENTTERMS"/>
+      <viewAttribute id="BILLTOPARTY"/>
+      <viewAttribute id="BILLINGDATE"/>
+      <viewAttribute id="TAXAMOUNT"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="MATERIALDESCRIPTION"/>
+      <viewAttribute id="MATERIALTYPE"/>
+      <viewAttribute id="BILLINGITEM"/>
+      <viewAttribute id="QUANTITY"/>
+    
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute id="CC_Delay_Delivery_Days"/>
+    
+      <viewAttribute id="ITEMVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Join_4"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:AggregationView" id="Aggregation_2">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="PAYMENTTERMS"/>
+      <viewAttribute id="BILLTOPARTY" aggregationType="sum"/>
+      <viewAttribute id="BILLINGDATE"/>
+      <viewAttribute id="TAXAMOUNT" aggregationType="sum"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="MATERIALDESCRIPTION"/>
+      <viewAttribute id="MATERIALTYPE"/>
+      <viewAttribute id="BILLINGITEM" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute id="CC_Delay_Delivery_Days"/>
+    
+      <viewAttribute id="ITEMVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="Projection_4"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:WindowFunctionView" id="WindowFunction_2">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="PAYMENTTERMS"/>
+      <viewAttribute id="BILLTOPARTY" aggregationType="sum"/>
+      <viewAttribute id="BILLINGDATE"/>
+      <viewAttribute id="TAXAMOUNT" aggregationType="sum"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="MATERIALDESCRIPTION"/>
+      <viewAttribute id="MATERIALTYPE"/>
+      <viewAttribute id="BILLINGITEM" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute id="CC_Delay_Delivery_Days"/>
+    
+      <viewAttribute id="ITEMVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Aggregation_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESORG" source="SALESORG"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISTCHANNEL" source="DISTCHANNEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCDATE" source="DOCDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNAME" source="CUSTOMERNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BUSINESSPARTNER" source="BUSINESSPARTNER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDOCUMENT" source="BILLINGDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAYMENTTERMS" source="PAYMENTTERMS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLTOPARTY" source="BILLTOPARTY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDATE" source="BILLINGDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TAXAMOUNT" source="TAXAMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALNUMBER" source="MATERIALNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALDESCRIPTION" source="MATERIALDESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALTYPE" source="MATERIALTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGITEM" source="BILLINGITEM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYDATE" source="DELIVERYDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYSTATUS" source="DELIVERYSTATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CC_Delay_Delivery_Days" source="CC_Delay_Delivery_Days"/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="ITEMVALUE" source="ITEMVALUE"/>
+    </input>
+    <function name="COUNT">
+      <functionArgument>&quot;SALESDOCUMENT&quot;</functionArgument>
+    </function>
+    <windowFunctionResultColumn datatype="DOUBLE">Total_orders</windowFunctionResultColumn>
+    <orderAttributes/>
+    <partitionAttributes>
+      <partitionAttribute>SALESDOCUMENT</partitionAttribute>
+    </partitionAttributes>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="PAYMENTTERMS"/>
+      <viewAttribute id="BILLTOPARTY"/>
+      <viewAttribute id="BILLINGDATE"/>
+      <viewAttribute id="TAXAMOUNT"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="MATERIALDESCRIPTION"/>
+      <viewAttribute id="MATERIALTYPE"/>
+      <viewAttribute id="BILLINGITEM"/>
+      <viewAttribute id="QUANTITY"/>
+    
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute id="CC_Delay_Delivery_Days"/>
+      <viewAttribute id="Total_orders"/>
+    
+      <viewAttribute id="ITEMVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes>
+      <calculatedViewAttribute id="CC_Total_Sale_Amount" datatype="DECIMAL" length="20" scale="3" expressionLanguage="SQL">
+        <formula>&quot;TOTALNETVALUE&quot;+&quot;TAXAMOUNT&quot;</formula>
+      </calculatedViewAttribute>
+    </calculatedViewAttributes>
+    <input node="WindowFunction_2"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:WindowFunctionView" id="WindowFunction_3">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="PAYMENTTERMS"/>
+      <viewAttribute id="BILLTOPARTY" aggregationType="sum"/>
+      <viewAttribute id="BILLINGDATE"/>
+      <viewAttribute id="TAXAMOUNT" aggregationType="sum"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="MATERIALDESCRIPTION"/>
+      <viewAttribute id="MATERIALTYPE"/>
+      <viewAttribute id="BILLINGITEM" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="CC_Total_Sale_Amount" aggregationType="sum"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute id="CC_Delay_Delivery_Days"/>
+      <viewAttribute id="Total_orders" aggregationType="sum"/>
+    
+      <viewAttribute id="ITEMVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_3">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESORG" source="SALESORG"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISTCHANNEL" source="DISTCHANNEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCDATE" source="DOCDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNAME" source="CUSTOMERNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BUSINESSPARTNER" source="BUSINESSPARTNER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDOCUMENT" source="BILLINGDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAYMENTTERMS" source="PAYMENTTERMS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLTOPARTY" source="BILLTOPARTY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDATE" source="BILLINGDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TAXAMOUNT" source="TAXAMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALNUMBER" source="MATERIALNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALDESCRIPTION" source="MATERIALDESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALTYPE" source="MATERIALTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGITEM" source="BILLINGITEM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CC_Total_Sale_Amount" source="CC_Total_Sale_Amount"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYDATE" source="DELIVERYDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYSTATUS" source="DELIVERYSTATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CC_Delay_Delivery_Days" source="CC_Delay_Delivery_Days"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="Total_orders" source="Total_orders"/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="ITEMVALUE" source="ITEMVALUE"/>
+    </input>
+    <function name="AVG">
+      <functionArgument>&quot;ITEMVALUE&quot;</functionArgument>
+    </function>
+    <windowFunctionResultColumn datatype="DOUBLE">Avg_Sale_customer</windowFunctionResultColumn>
+    <orderAttributes/>
+    <partitionAttributes>
+      <partitionAttribute>CUSTOMERNUMBER</partitionAttribute>
+    </partitionAttributes>
+  </calculationView>
+  <calculationView xsi:type="Calculation:WindowFunctionView" id="WindowFunction_1" dynamicOrderAttributes="true">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="PAYMENTTERMS"/>
+      <viewAttribute id="BILLTOPARTY" aggregationType="sum"/>
+      <viewAttribute id="BILLINGDATE"/>
+      <viewAttribute id="TAXAMOUNT" aggregationType="sum"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="MATERIALDESCRIPTION"/>
+      <viewAttribute id="MATERIALTYPE"/>
+      <viewAttribute id="BILLINGITEM" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="CC_Total_Sale_Amount" aggregationType="sum"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute id="CC_Delay_Delivery_Days"/>
+      <viewAttribute id="CUSTOMERNAME_1"/>
+      <viewAttribute id="Avg_Sale_customer" aggregationType="sum"/>
+      <viewAttribute id="Total_orders" aggregationType="sum"/>
+    
+      <viewAttribute id="ITEMVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="WindowFunction_3">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESORG" source="SALESORG"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISTCHANNEL" source="DISTCHANNEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCDATE" source="DOCDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNAME" source="CUSTOMERNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BUSINESSPARTNER" source="BUSINESSPARTNER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDOCUMENT" source="BILLINGDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAYMENTTERMS" source="PAYMENTTERMS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLTOPARTY" source="BILLTOPARTY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDATE" source="BILLINGDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TAXAMOUNT" source="TAXAMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALNUMBER" source="MATERIALNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALDESCRIPTION" source="MATERIALDESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALTYPE" source="MATERIALTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGITEM" source="BILLINGITEM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CC_Total_Sale_Amount" source="CC_Total_Sale_Amount"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYDATE" source="DELIVERYDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYSTATUS" source="DELIVERYSTATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CC_Delay_Delivery_Days" source="CC_Delay_Delivery_Days"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNAME_1" source="CUSTOMERNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="Avg_Sale_customer" source="Avg_Sale_customer"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="Total_orders" source="Total_orders"/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="ITEMVALUE" source="ITEMVALUE"/>
+    </input>
+    <function name="RANK"/>
+    <windowFunctionResultColumn datatype="BIGINT">Top_selling</windowFunctionResultColumn>
+    <orderAttributes>
+      <orderAttribute direction="DESC">QUANTITY</orderAttribute>
+      <orderAttribute direction="DESC">TOTALNETVALUE</orderAttribute>
+      <orderAttribute direction="ASC">DELIVERYDATE</orderAttribute>
+      <orderAttribute direction="ASC">SALESDOCUMENT</orderAttribute>
+    </orderAttributes>
+    <partitionAttributes/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="WindowFunction_1">
+  <attributes>
+    <attribute id="SALESDOCUMENT" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESDOCUMENT"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="SALESDOCUMENT"/>
+    </attribute>
+    <attribute id="CUSTOMERNUMBER" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUSTOMERNUMBER"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="CUSTOMERNUMBER"/>
+    </attribute>
+    <attribute id="SALESORG" order="4" displayAttribute="false" attributeHierarchyActive="false" hidden="true">
+      <descriptions defaultDescription="SALESORG"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="SALESORG"/>
+    </attribute>
+    <attribute id="DISTCHANNEL" order="5" displayAttribute="false" attributeHierarchyActive="false" hidden="true">
+      <descriptions defaultDescription="DISTCHANNEL"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="DISTCHANNEL"/>
+    </attribute>
+    <attribute id="DOCDATE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DOCDATE"/>
+      <localVariable>Date_Range</localVariable>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="DOCDATE"/>
+    </attribute>
+    <attribute id="CUSTOMERNAME" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUSTOMERNAME"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="CUSTOMERNAME"/>
+    </attribute>
+    <attribute id="BUSINESSPARTNER" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="BUSINESSPARTNER"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="BUSINESSPARTNER"/>
+    </attribute>
+    <attribute id="BILLINGDOCUMENT" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="BILLINGDOCUMENT"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="BILLINGDOCUMENT"/>
+    </attribute>
+    <attribute id="PAYMENTTERMS" order="11" displayAttribute="false" attributeHierarchyActive="false" hidden="true">
+      <descriptions defaultDescription="PAYMENTTERMS"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="PAYMENTTERMS"/>
+    </attribute>
+    <attribute id="BILLINGDATE" order="13" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="BILLINGDATE"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="BILLINGDATE"/>
+    </attribute>
+    <attribute id="MATERIALNUMBER" order="15" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MATERIALNUMBER"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="MATERIALNUMBER"/>
+    </attribute>
+    <attribute id="MATERIALDESCRIPTION" order="16" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MATERIALDESCRIPTION"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="MATERIALDESCRIPTION"/>
+    </attribute>
+    <attribute id="MATERIALTYPE" order="17" displayAttribute="false" attributeHierarchyActive="false" hidden="true">
+      <descriptions defaultDescription="MATERIALTYPE"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="MATERIALTYPE"/>
+    </attribute>
+  
+    <attribute id="DELIVERYDATE" order="21" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DELIVERYDATE"/>
+  
+      <keyMapping columnObjectName="WindowFunction_1" columnName="DELIVERYDATE"/>
+  
+    </attribute>
+    <attribute id="DELIVERYSTATUS" order="22" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DELIVERYSTATUS"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="DELIVERYSTATUS"/>
+    </attribute>
+    <attribute id="CC_Delay_Delivery_Days" order="23" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CC_Delay_Delivery_Days"/>
+      <keyMapping columnObjectName="WindowFunction_1" columnName="CC_Delay_Delivery_Days"/>
+    </attribute>
+  
+    <attribute id="ITEMVALUE" order="26" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ITEMVALUE"/>
+  
+      <keyMapping columnObjectName="WindowFunction_1" columnName="ITEMVALUE"/>
+  
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="CC_Total_Sale_Amount" order="1" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="CC_Total_Sale_Amount"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="CC_Total_Sale_Amount"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+        <attribute attributeName="CUSTOMERNUMBER"/>
+        <attribute attributeName="MATERIALNUMBER"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="TOTALNETVALUE" order="7" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTALNETVALUE"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="TOTALNETVALUE"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+        <attribute attributeName="CUSTOMERNUMBER"/>
+        <attribute attributeName="BILLINGDOCUMENT"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="BILLTOPARTY" order="12" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="BILLTOPARTY"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="BILLTOPARTY"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+        <attribute attributeName="CUSTOMERNUMBER"/>
+        <attribute attributeName="BILLINGDOCUMENT"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="TAXAMOUNT" order="14" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TAXAMOUNT"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="TAXAMOUNT"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+        <attribute attributeName="CUSTOMERNUMBER"/>
+        <attribute attributeName="MATERIALNUMBER"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="BILLINGITEM" order="18" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="BILLINGITEM"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="BILLINGITEM"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+        <attribute attributeName="BILLINGDOCUMENT"/>
+        <attribute attributeName="BUSINESSPARTNER"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="QUANTITY" order="19" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="QUANTITY"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="QUANTITY"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+        <attribute attributeName="CUSTOMERNUMBER"/>
+        <attribute attributeName="MATERIALNUMBER"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  
+    <measure id="Top_selling" order="20" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="Top_selling"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="Top_selling"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+        <attribute attributeName="CUSTOMERNUMBER"/>
+        <attribute attributeName="MATERIALNUMBER"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="Avg_Sale_customer" order="24" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="Avg_Sale_customer"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="Avg_Sale_customer"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+        <attribute attributeName="CUSTOMERNUMBER"/>
+        <attribute attributeName="MATERIALNUMBER"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="Total_orders" order="25" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="Total_orders"/>
+      <measureMapping columnObjectName="WindowFunction_1" columnName="Total_orders"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+        <attribute attributeName="CUSTOMERNUMBER"/>
+        <attribute attributeName="BUSINESSPARTNER"/>
+        <attribute attributeName="BILLINGDOCUMENT"/>
+        <attribute attributeName="MATERIALNUMBER"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="350" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="1866"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="115" y="1546"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_5" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="533" y="1226"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_6" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="323" y="1226"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_7" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="401" y="1706"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_8" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="1866"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="395" y="1066"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_5" modelObjectNameSpace="Join_3" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="193"/>
+    </shape>
+    <shape modelObjectName="Projection_6" modelObjectNameSpace="Join_3" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_6" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="118" y="1706"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_6" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="Projection_8" modelObjectNameSpace="Join_6" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_5" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="325" y="1546"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Join_6" modelObjectNameSpace="Join_5" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="Projection_7" modelObjectNameSpace="Join_5" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="141" y="1386"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape modelObjectName="Join_5" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="16" y="16"/>
+      <rectangleSize width="196"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="276" y="16"/>
+      <rectangleSize width="193"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="113" y="1226"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="9_CV_SALES_RECORD" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="16" y="16"/>
+      <rectangleSize width="199"/>
+    </shape>
+    <shape modelObjectName="Join_1" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="287" y="114"/>
+      <rectangleSize width="196"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Aggregation_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="113" y="1074"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_4" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="316" y="906"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Join_3" modelObjectNameSpace="Join_4" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="16" y="80"/>
+      <rectangleSize width="215"/>
+    </shape>
+    <shape modelObjectName="Aggregation_1" modelObjectNameSpace="Join_4" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="295" y="16"/>
+      <rectangleSize width="196"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_4" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="316" y="801"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Aggregation_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="344" y="676"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="WindowFunction_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="344" y="571"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="350" y="446"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="WindowFunction_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="350" y="341"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="WindowFunction_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="350" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape></shapes>
+</layout>
+</Calculation:scenario>

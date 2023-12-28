@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="5_CV_SALES_RECORD" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" application="BAS" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="5_CV_SALES_RECORD.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="VBRK1">
+    <resourceUri>VBRK1</resourceUri>
+  </DataSource>
+  <DataSource id="VBAK4">
+    <resourceUri>VBAK4</resourceUri>
+  </DataSource>
+  <DataSource id="VBAP1">
+    <resourceUri>VBAP1</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
+    <viewAttributes>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="BILLINGDATE"/>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="NETVALUE"/>
+      <viewAttribute id="TAXAMOUNT"/>
+      <viewAttribute id="BILLTOPARTY"/>
+      <viewAttribute id="PAYMENTTERMS"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBRK1"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Aggregation_1">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBAK4"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_4">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="ITEMNUMBER"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="NETPRICE"/>
+      <viewAttribute id="ITEMVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBAP1"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_2" multiJoinNode="Join_1" multiJoinCentralTable="Projection_1" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="BILLINGDOCUMENT"/>
+      <viewAttribute id="BILLINGDATE"/>
+      <viewAttribute id="NETVALUE" aggregationType="sum"/>
+      <viewAttribute id="TAXAMOUNT" aggregationType="sum"/>
+      <viewAttribute id="BILLTOPARTY"/>
+      <viewAttribute id="PAYMENTTERMS"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_3">
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDOCUMENT" source="BILLINGDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLINGDATE" source="BILLINGDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NETVALUE" source="NETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TAXAMOUNT" source="TAXAMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILLTOPARTY" source="BILLTOPARTY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAYMENTTERMS" source="PAYMENTTERMS"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_3" multiJoinNode="Join_1" multiJoinCentralTable="Projection_1" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Aggregation_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESORG" source="SALESORG"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISTCHANNEL" source="DISTCHANNEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCDATE" source="DOCDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_1" multiJoinNode="Join_1" multiJoinCentralTable="Projection_1" multiJoinOrder="Outside In">
+    <viewAttributes/>
+    <calculatedViewAttributes/>
+    <input node="Projection_4"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="SALESDOCUMENT" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESDOCUMENT"/>
+      <keyMapping columnObjectName="Join_1" columnName="SALESDOCUMENT"/>
+    </attribute>
+    <attribute id="CUSTOMERNUMBER" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUSTOMERNUMBER"/>
+      <keyMapping columnObjectName="Join_1" columnName="CUSTOMERNUMBER"/>
+    </attribute>
+    <attribute id="SALESORG" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESORG"/>
+      <keyMapping columnObjectName="Join_1" columnName="SALESORG"/>
+    </attribute>
+    <attribute id="DISTCHANNEL" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DISTCHANNEL"/>
+      <keyMapping columnObjectName="Join_1" columnName="DISTCHANNEL"/>
+    </attribute>
+    <attribute id="DOCDATE" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DOCDATE"/>
+      <keyMapping columnObjectName="Join_1" columnName="DOCDATE"/>
+    </attribute>
+  
+    <attribute id="BILLINGDOCUMENT" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="BILLINGDOCUMENT"/>
+  
+      <keyMapping columnObjectName="Join_1" columnName="BILLINGDOCUMENT"/>
+  
+    </attribute>
+    <attribute id="BILLINGDATE" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="BILLINGDATE"/>
+      <keyMapping columnObjectName="Join_1" columnName="BILLINGDATE"/>
+    </attribute>
+    <attribute id="BILLTOPARTY" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="BILLTOPARTY"/>
+      <keyMapping columnObjectName="Join_1" columnName="BILLTOPARTY"/>
+    </attribute>
+    <attribute id="PAYMENTTERMS" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PAYMENTTERMS"/>
+      <keyMapping columnObjectName="Join_1" columnName="PAYMENTTERMS"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes>
+    <calculatedAttribute id="C_YEAR" order="12" semanticType="empty" displayAttribute="false" attributeHierarchyActive="false">
+      <keyCalculation datatype="NVARCHAR" expressionLanguage="SQL" length="4">
+        <formula>YEAR(&quot;DOCDATE&quot;)</formula>
+      </keyCalculation>
+      </calculatedAttribute>
+  </calculatedAttributes>
+  <baseMeasures>
+  
+    <measure id="NETVALUE" order="8" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="NETVALUE"/>
+      <measureMapping columnObjectName="Join_1" columnName="NETVALUE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="TAXAMOUNT" order="9" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TAXAMOUNT"/>
+      <measureMapping columnObjectName="Join_1" columnName="TAXAMOUNT"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="TOTALNETVALUE" order="14" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTALNETVALUE"/>
+      <measureMapping columnObjectName="Join_1" columnName="TOTALNETVALUE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures>
+    <measure id="COUNT_SALESORDERS" order="13" aggregationType="sum" measureType="simple" calculatedMeasureType="counter" datatype="BIGINT" length="">
+      <descriptions defaultDescription="COUNT_SALESORDERS"/>
+      <exceptionAggregation>
+        <attribute attributeName="SALESDOCUMENT"/>
+      </exceptionAggregation>
+      <formula>1</formula>
+      
+      
+      
+      
+      <exceptionAggregationMetadata/>
+    </measure></calculatedMeasures>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="361" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="391"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Aggregation_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="512" y="391"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_4" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="50" y="407"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+  
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="236"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Aggregation_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="2" y="82"/>
+      <rectangleSize width="196.41357421875"/>
+    </shape>
+  
+    <shape modelObjectName="Projection_3" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="251" y="104"/>
+      <rectangleSize width="191"/>
+    </shape>
+    <shape modelObjectName="Projection_4" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="567" y="5"/>
+      <rectangleSize width="187"/>
+    </shape></shapes>
+</layout>
+</Calculation:scenario>

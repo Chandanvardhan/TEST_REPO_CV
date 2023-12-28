@@ -1,0 +1,9 @@
+Column TABLE ACDOCA1 (
+    DocumentNumber NVARCHAR(225),
+    PostingDate DATE,
+    GLAccount NVARCHAR(225),
+    DebitAmount DECIMAL(18, 2),
+    CreditAmount DECIMAL(18, 2),
+    CostCenter NVARCHAR(225),
+    ProfitCenter NVARCHAR(225)
+);

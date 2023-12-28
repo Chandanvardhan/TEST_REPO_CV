@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="3_CV_SALES_RECORD" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" application="BAS" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="3_CV_SALES_RECORD.hdbcalculationview"/>
+<localVariables>
+  <variable id="IP_Customer_Name" parameter="true">
+    <descriptions defaultDescription=""/>
+    <variableProperties datatype="NVARCHAR" length="255" mandatory="true" defaultValue="Acme Corp.">
+      <valueDomain type="AttributeValue">
+        <externalLikeStructureName>BP0001</externalLikeStructureName>
+        <externalLikeElementName>CUSTOMERNAME</externalLikeElementName>
+      </valueDomain>
+      <selection multiLine="true" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="VBAK4">
+    <resourceUri>VBAK4</resourceUri>
+  </DataSource>
+  <DataSource id="BP0001">
+    <resourceUri>BP0001</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBAK4"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="ADDRESS"/>
+      <viewAttribute id="CITY"/>
+      <viewAttribute id="COUNTRY"/>
+      <viewAttribute id="EMAIL"/>
+      <viewAttribute id="PHONE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="BP0001"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="leftOuter" filterExpressionLanguage="SQL">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="CUSTOMERNAME"/>
+      <viewAttribute id="BUSINESSPARTNER"/>
+      <viewAttribute id="ADDRESS"/>
+      <viewAttribute hidden="true" id="JOIN$BUSINESSPARTNER$CUSTOMERNUMBER"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNAME" source="CUSTOMERNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BUSINESSPARTNER" source="BUSINESSPARTNER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ADDRESS" source="ADDRESS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$BUSINESSPARTNER$CUSTOMERNUMBER" source="BUSINESSPARTNER"/>
+    </input>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESORG" source="SALESORG"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISTCHANNEL" source="DISTCHANNEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCDATE" source="DOCDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$BUSINESSPARTNER$CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+    </input>
+    <filter>&quot;CUSTOMERNAME&quot; in ($$IP_Customer_Name$$)</filter>
+    <joinAttribute name="JOIN$BUSINESSPARTNER$CUSTOMERNUMBER"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="SALESDOCUMENT" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESDOCUMENT"/>
+      <keyMapping columnObjectName="Join_1" columnName="SALESDOCUMENT"/>
+    </attribute>
+    <attribute id="CUSTOMERNUMBER" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUSTOMERNUMBER"/>
+      <keyMapping columnObjectName="Join_1" columnName="CUSTOMERNUMBER"/>
+    </attribute>
+    <attribute id="SALESORG" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESORG"/>
+      <keyMapping columnObjectName="Join_1" columnName="SALESORG"/>
+    </attribute>
+    <attribute id="DISTCHANNEL" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DISTCHANNEL"/>
+      <keyMapping columnObjectName="Join_1" columnName="DISTCHANNEL"/>
+    </attribute>
+    <attribute id="DOCDATE" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DOCDATE"/>
+      <keyMapping columnObjectName="Join_1" columnName="DOCDATE"/>
+    </attribute>
+    <attribute id="CUSTOMERNAME" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUSTOMERNAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="CUSTOMERNAME"/>
+    </attribute>
+    <attribute id="BUSINESSPARTNER" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="BUSINESSPARTNER"/>
+      <keyMapping columnObjectName="Join_1" columnName="BUSINESSPARTNER"/>
+    </attribute>
+    <attribute id="ADDRESS" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ADDRESS"/>
+      <keyMapping columnObjectName="Join_1" columnName="ADDRESS"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="TOTALNETVALUE" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTALNETVALUE"/>
+      <measureMapping columnObjectName="Join_1" columnName="TOTALNETVALUE"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+        <attribute attributeName="CUSTOMERNUMBER"/>
+        <attribute attributeName="SALESORG"/>
+        <attribute attributeName="DISTCHANNEL"/>
+        <attribute attributeName="DOCDATE"/>
+        <attribute attributeName="CUSTOMERNAME"/>
+        <attribute attributeName="BUSINESSPARTNER"/>
+        <attribute attributeName="ADDRESS"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-7" y="353"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="250" y="353"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="82" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="16" y="16"/>
+      <rectangleSize width="193"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="273" y="16"/>
+      <rectangleSize width="196"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

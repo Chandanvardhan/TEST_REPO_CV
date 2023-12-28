@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="12_CV_SALE_RECORD" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" application="BAS" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="12_CV_SALE_RECORD.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="VBAK4">
+    <resourceUri>VBAK4</resourceUri>
+  </DataSource>
+  <DataSource id="LIKP1">
+    <resourceUri>LIKP1</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBAK4"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="DELIVERY"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="SHIPPINGPOINT"/>
+      <viewAttribute id="SHIPTOPARTY"/>
+      <viewAttribute id="TOTALWEIGHT"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="LIKP1"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute id="DELIVERY"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="SALESDOCUMENT_1"/>
+      <viewAttribute id="SHIPPINGPOINT"/>
+      <viewAttribute id="SHIPTOPARTY"/>
+      <viewAttribute id="TOTALWEIGHT"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+      <viewAttribute hidden="true" id="JOIN$SALESDOCUMENT$SALESDOCUMENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMERNUMBER" source="CUSTOMERNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESORG" source="SALESORG"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISTCHANNEL" source="DISTCHANNEL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCDATE" source="DOCDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALESDOCUMENT$SALESDOCUMENT" source="SALESDOCUMENT"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERY" source="DELIVERY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYDATE" source="DELIVERYDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT_1" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SHIPPINGPOINT" source="SHIPPINGPOINT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SHIPTOPARTY" source="SHIPTOPARTY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALWEIGHT" source="TOTALWEIGHT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIVERYSTATUS" source="DELIVERYSTATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALESDOCUMENT$SALESDOCUMENT" source="SALESDOCUMENT"/>
+    </input>
+    <joinAttribute name="JOIN$SALESDOCUMENT$SALESDOCUMENT"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE"/>
+      <viewAttribute id="DELIVERY"/>
+      <viewAttribute id="DELIVERYDATE"/>
+      <viewAttribute id="SALESDOCUMENT_1"/>
+      <viewAttribute id="SHIPPINGPOINT"/>
+      <viewAttribute id="SHIPTOPARTY"/>
+      <viewAttribute id="TOTALWEIGHT"/>
+      <viewAttribute id="DELIVERYSTATUS"/>
+    </viewAttributes>
+    <calculatedViewAttributes>
+      <calculatedViewAttribute id="Delay_deleviry" datatype="NVARCHAR" length="13" expressionLanguage="SQL">
+        <formula>DAYS_BETWEEN(&quot;DOCDATE&quot;,&quot;DELIVERYDATE&quot;)</formula>
+      </calculatedViewAttribute>
+    </calculatedViewAttributes>
+    <input node="Join_1"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Projection_3">
+  <attributes>
+    <attribute id="DOCDATE" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DOCDATE"/>
+      <keyMapping columnObjectName="Projection_3" columnName="DOCDATE"/>
+    </attribute>
+    <attribute id="DELIVERYDATE" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DELIVERYDATE"/>
+      <keyMapping columnObjectName="Projection_3" columnName="DELIVERYDATE"/>
+    </attribute>
+    <attribute id="SALESDOCUMENT" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESDOCUMENT"/>
+      <keyMapping columnObjectName="Projection_3" columnName="SALESDOCUMENT"/>
+    </attribute>
+    <attribute id="Delay_deleviry" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Delay_deleviry"/>
+      <keyMapping columnObjectName="Projection_3" columnName="Delay_deleviry"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes>
+    <calculatedAttribute id="CC_Delay_Delivery" order="1" semanticType="empty" displayAttribute="false" attributeHierarchyActive="false">
+      <keyCalculation datatype="DATE" expressionLanguage="SQL">
+        <formula>EXTRACT_DAY(&quot;Delay_deleviry&quot;)</formula>
+      </keyCalculation>
+    </calculatedAttribute>
+  </calculatedAttributes>
+  <baseMeasures>
+    <measure id="TOTALNETVALUE" order="4" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTALNETVALUE"/>
+      <measureMapping columnObjectName="Projection_3" columnName="TOTALNETVALUE"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="100" y="105"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-178" y="231"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="2" y="231"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-78" y="158"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="62" y="202"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="PuTables" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="PuTables.hdbcalculationview"/>
+<localVariables>
+  <variable id="IP_Country" parameter="true">
+    <descriptions defaultDescription=""/>
+    <variableProperties datatype="NVARCHAR" length="20" mandatory="true" scale="NaN">
+      <valueDomain type="AttributeValue">
+        <attribute name="COUNTRY"/>
+      </valueDomain>
+      <selection multiLine="true" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="SALES_2020">
+    <resourceUri>SALES_2020</resourceUri>
+  </DataSource>
+  <DataSource id="SALES_2021">
+    <resourceUri>SALES_2021</resourceUri>
+  </DataSource>
+  <DataSource id="SALES_2022">
+    <resourceUri>SALES_2022</resourceUri>
+  </DataSource>
+  <DataSource id="SALES_2023">
+    <resourceUri>SALES_2023</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="AMOUNT"/>
+      <viewAttribute id="SALE_DATE"/>
+    
+      <viewAttribute id="COUNTRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="SALES_2020"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="AMOUNT"/>
+      <viewAttribute id="SALE_DATE"/>
+    
+      <viewAttribute id="COUNTRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="SALES_2021"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="AMOUNT"/>
+      <viewAttribute id="SALE_DATE"/>
+    
+      <viewAttribute id="COUNTRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="SALES_2022"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_4">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="AMOUNT"/>
+      <viewAttribute id="SALE_DATE"/>
+    
+      <viewAttribute id="COUNTRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="SALES_2023"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:UnionView" id="Union_1">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID" aggregationType="sum"/>
+      <viewAttribute id="PRODUCT_ID" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="AMOUNT" aggregationType="sum"/>
+      <viewAttribute id="SALE_DATE"/>
+    
+      <viewAttribute id="COUNTRY"/>
+      <viewAttribute datatype="NVARCHAR" length="13" id="Constant_Country"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1" emptyUnionBehavior="NO_ROW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_ID" source="SALE_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AMOUNT" source="AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_DATE" source="SALE_DATE"/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="Constant_Country" null="false" value="IN"/>
+    </input>
+    <input node="Projection_2" emptyUnionBehavior="NO_ROW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_ID" source="SALE_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AMOUNT" source="AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_DATE" source="SALE_DATE"/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="Constant_Country" null="false" value="AU"/>
+    </input>
+    <input node="Projection_3" emptyUnionBehavior="NO_ROW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_ID" source="SALE_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AMOUNT" source="AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_DATE" source="SALE_DATE"/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="Constant_Country" null="false" value="USA"/>
+    </input>
+    <input node="Projection_4" emptyUnionBehavior="NO_ROW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_ID" source="SALE_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AMOUNT" source="AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_DATE" source="SALE_DATE"/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="Constant_Country" null="false" value="EU"/>
+    </input>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Union_1" filterExpressionLanguage="SQL">
+  <attributes>
+    <attribute id="Constant_Country" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Constant_Country"/>
+      <keyMapping columnObjectName="Union_1" columnName="Constant_Country"/>
+    </attribute>
+    <attribute id="SALE_DATE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALE_DATE"/>
+      <keyMapping columnObjectName="Union_1" columnName="SALE_DATE"/>
+    </attribute>
+    <attribute id="COUNTRY" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COUNTRY"/>
+      <keyMapping columnObjectName="Union_1" columnName="COUNTRY"/>
+    </attribute>
+    <attribute id="Constant_Country_1" order="8" displayAttribute="false" attributeHierarchyActive="false" hidden="true">
+      <descriptions defaultDescription="Constant_Country"/>
+      <keyMapping columnObjectName="Union_1" columnName="Constant_Country"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="SALE_ID" order="2" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SALE_ID"/>
+      <measureMapping columnObjectName="Union_1" columnName="SALE_ID"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="Constant_Country"/>
+        <attribute attributeName="SALE_DATE"/>
+        <attribute attributeName="COUNTRY"/>
+        <attribute attributeName="Constant_Country_1"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="PRODUCT_ID" order="3" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PRODUCT_ID"/>
+      <measureMapping columnObjectName="Union_1" columnName="PRODUCT_ID"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="Constant_Country"/>
+        <attribute attributeName="SALE_DATE"/>
+        <attribute attributeName="COUNTRY"/>
+        <attribute attributeName="Constant_Country_1"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="QUANTITY" order="4" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="QUANTITY"/>
+      <measureMapping columnObjectName="Union_1" columnName="QUANTITY"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="Constant_Country"/>
+        <attribute attributeName="SALE_DATE"/>
+        <attribute attributeName="COUNTRY"/>
+        <attribute attributeName="Constant_Country_1"/>
+      </exceptionAggregationMetadata>
+    </measure>
+    <measure id="AMOUNT" order="5" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="AMOUNT"/>
+      <measureMapping columnObjectName="Union_1" columnName="AMOUNT"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="Constant_Country"/>
+        <attribute attributeName="SALE_DATE"/>
+        <attribute attributeName="COUNTRY"/>
+        <attribute attributeName="Constant_Country_1"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <sortAttributes>
+    <sortAttribute id="SALE_ID" direction="ASC"/>
+    <sortAttribute id="PRODUCT_ID" direction="ASC"/>
+  </sortAttributes>
+  <localDimensions/>
+
+  <filter>$$IP_Country$$ = &quot;Constant_Country&quot; or $$IP_Country$$ = '*'</filter>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="474" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="406"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="722" y="406"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="512" y="406"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_4" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="91" y="406"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Union_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="474" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

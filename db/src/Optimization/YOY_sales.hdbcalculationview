@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="YOY_sales" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="YOY_sales.hdbcalculationview"/>
+<localVariables>
+  <variable id="VAR_Year">
+    <descriptions defaultDescription="VAR_Year"/>
+    <variableProperties datatype="DATE" length="10" scale="NaN" defaultValue="">
+      <valueDomain type="AttributeValue">
+        <attribute name="SALE_DATE"/>
+      </valueDomain>
+      <selection type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="SALES_2020">
+    <resourceUri>SALES_2020</resourceUri>
+  </DataSource>
+  <DataSource id="SALES_2021">
+    <resourceUri>SALES_2021</resourceUri>
+  </DataSource>
+  <DataSource id="SALES_2022">
+    <resourceUri>SALES_2022</resourceUri>
+  </DataSource>
+  <DataSource id="SALES_2023">
+    <resourceUri>SALES_2023</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="AMOUNT"/>
+      <viewAttribute id="SALE_DATE"/>
+      <viewAttribute id="COUNTRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="SALES_2020"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="AMOUNT"/>
+      <viewAttribute id="SALE_DATE"/>
+      <viewAttribute id="COUNTRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="SALES_2021"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="AMOUNT"/>
+      <viewAttribute id="SALE_DATE"/>
+      <viewAttribute id="COUNTRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="SALES_2022"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_4">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="AMOUNT"/>
+      <viewAttribute id="SALE_DATE"/>
+      <viewAttribute id="COUNTRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="SALES_2023"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:UnionView" id="Union_1">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID" aggregationType="sum"/>
+      <viewAttribute id="PRODUCT_ID" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="AMOUNT" aggregationType="sum"/>
+      <viewAttribute id="SALE_DATE"/>
+      <viewAttribute id="COUNTRY"/>
+      <viewAttribute datatype="DATE" id="Year_Pu"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1" emptyUnionBehavior="NO_ROW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_ID" source="SALE_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AMOUNT" source="AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_DATE" source="SALE_DATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="Year_Pu" null="false" value="2020"/>
+    </input>
+    <input node="Projection_2" emptyUnionBehavior="NO_ROW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_ID" source="SALE_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AMOUNT" source="AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_DATE" source="SALE_DATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="Year_Pu" null="false" value="2021"/>
+    </input>
+    <input node="Projection_3" emptyUnionBehavior="NO_ROW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_ID" source="SALE_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AMOUNT" source="AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_DATE" source="SALE_DATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="Year_Pu" null="false" value="2022"/>
+    </input>
+    <input node="Projection_4" emptyUnionBehavior="NO_ROW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_ID" source="SALE_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AMOUNT" source="AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_DATE" source="SALE_DATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
+      <mapping xsi:type="Calculation:ConstantAttributeMapping" target="Year_Pu" null="false" value="2023"/>
+    </input>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Union_1">
+  <attributes>
+    <attribute id="Year_Pu" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Year_Pu"/>
+      <localVariable>VAR_Year</localVariable>
+      <keyMapping columnObjectName="Union_1" columnName="Year_Pu"/>
+    </attribute>
+    <attribute id="SALE_ID" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALE_ID"/>
+      <keyMapping columnObjectName="Union_1" columnName="SALE_ID"/>
+    </attribute>
+    <attribute id="PRODUCT_ID" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PRODUCT_ID"/>
+      <keyMapping columnObjectName="Union_1" columnName="PRODUCT_ID"/>
+    </attribute>
+    <attribute id="QUANTITY" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="QUANTITY"/>
+      <keyMapping columnObjectName="Union_1" columnName="QUANTITY"/>
+    </attribute>
+    <attribute id="SALE_DATE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALE_DATE"/>
+      <keyMapping columnObjectName="Union_1" columnName="SALE_DATE"/>
+    </attribute>
+    <attribute id="COUNTRY" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COUNTRY"/>
+      <keyMapping columnObjectName="Union_1" columnName="COUNTRY"/>
+    </attribute>
+    <attribute id="Year_Pu_1" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Year_Pu"/>
+      <keyMapping columnObjectName="Union_1" columnName="Year_Pu"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="AMOUNT" order="5" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="AMOUNT"/>
+      <measureMapping columnObjectName="Union_1" columnName="AMOUNT"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="Year_Pu"/>
+        <attribute attributeName="SALE_ID"/>
+        <attribute attributeName="PRODUCT_ID"/>
+        <attribute attributeName="QUANTITY"/>
+        <attribute attributeName="SALE_DATE"/>
+        <attribute attributeName="COUNTRY"/>
+        <attribute attributeName="Year_Pu_1"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="474" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="406"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="722" y="406"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="512" y="406"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_4" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="406"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Union_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="474" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

@@ -1,0 +1,7 @@
+Column TABLE "TVKOS" (
+    SalesOrg NVARCHAR(225),
+    DistChannel NVARCHAR(252),
+    Descriptions NVARCHAR(255),
+    PRIMARY KEY (SalesOrg),
+    FOREIGN KEY (SalesOrg) REFERENCES "CV_NEW_HDI_DB_1".TVKO1 (SalesOrg)
+);

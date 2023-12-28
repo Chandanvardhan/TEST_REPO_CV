@@ -4,9 +4,10 @@ VIEW bank (
   Surname,
   GENDER,
   REGION,
-) 
+)
 AS
-SELECT C_ID,
+SELECT 
+ C_ID,
   Name,
   Surname,
   GENDER,

@@ -1,0 +1,10 @@
+Column TABLE VBRP1 (
+    BillingDocument NVARCHAR(225),
+    BillingItem INT,
+    MaterialNumber NVARCHAR(225),
+    Quantity INT,
+    NetPrice DECIMAL(30, 2),
+    TaxCode NVARCHAR(225),
+    RevenueAccount NVARCHAR(225),
+    PRIMARY KEY (BillingDocument, BillingItem)
+);

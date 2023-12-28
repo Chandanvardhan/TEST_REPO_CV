@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="1_3_CV_SALE_RECORD" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" application="BAS" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="H_CV_SALE_RECORD.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="VBAK4">
+    <resourceUri>VBAK4</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBAK4"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Projection_1">
+  <attributes>
+    <attribute id="SALESDOCUMENT" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESDOCUMENT"/>
+      <keyMapping columnObjectName="Projection_1" columnName="SALESDOCUMENT"/>
+    </attribute>
+    <attribute id="CUSTOMERNUMBER" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUSTOMERNUMBER"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUSTOMERNUMBER"/>
+    </attribute>
+    <attribute id="SALESORG" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESORG"/>
+      <keyMapping columnObjectName="Projection_1" columnName="SALESORG"/>
+    </attribute>
+    <attribute id="DISTCHANNEL" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DISTCHANNEL"/>
+      <keyMapping columnObjectName="Projection_1" columnName="DISTCHANNEL"/>
+    </attribute>
+    <attribute id="DOCDATE" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DOCDATE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="DOCDATE"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="TOTALNETVALUE" order="6" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTALNETVALUE"/>
+      <measureMapping columnObjectName="Projection_1" columnName="TOTALNETVALUE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-55" y="243"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

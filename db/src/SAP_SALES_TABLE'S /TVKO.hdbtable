@@ -1,0 +1,7 @@
+Column TABLE TVKO1 (
+    SalesOrg NVARCHAR(225) PRIMARY KEY,
+    Description NVARCHAR(255),
+    CompanyCode NVARCHAR(225),
+    Currency NVARCHAR(225),
+    Language NVARCHAR(225)
+);

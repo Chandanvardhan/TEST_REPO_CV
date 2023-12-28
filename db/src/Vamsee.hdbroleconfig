@@ -1,3 +1,8 @@
 {
-  "Vamsee": {}
+  "Vamsee": {},
+  "DBADMIN": {
+    "CV_NEW_HDI_DB_1": {
+      "schema": "CV_NEW_HDI_DB_1"
+    }
+  }
 }

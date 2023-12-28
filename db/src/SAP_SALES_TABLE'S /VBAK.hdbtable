@@ -1,0 +1,8 @@
+Column TABLE VBAK4 (
+    SalesDocument Nvarchar(225), PRIMARY KEY (SalesDocument),
+    CustomerNumber Nvarchar(225),
+    SalesOrg NVARCHAR(225),
+    DistChannel NVARCHAR(225),
+    DocDate DATE,
+    TotalNetValue DECIMAL(30, 2)
+); 

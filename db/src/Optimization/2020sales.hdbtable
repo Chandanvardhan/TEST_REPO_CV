@@ -1,0 +1,8 @@
+column table sales_2020 (
+    sale_id INT PRIMARY KEY,
+    product_id INT,
+    quantity INT,
+    amount DECIMAL(10, 2),
+    sale_date DATE,
+    Country VARCHAR(20)
+);

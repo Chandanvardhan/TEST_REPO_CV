@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="join" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="join.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="SALES_2020">
+    <resourceUri>SALES_2020</resourceUri>
+  </DataSource>
+  <DataSource id="SALES_2021">
+    <resourceUri>SALES_2021</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="AMOUNT"/>
+      <viewAttribute id="SALE_DATE"/>
+      <viewAttribute id="COUNTRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="SALES_2020"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="AMOUNT"/>
+      <viewAttribute id="SALE_DATE"/>
+      <viewAttribute id="COUNTRY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="SALES_2021"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:NonEquiJoinView" id="NonEquiJoin_1" cardinality="C1_1" joinType="inner" optimizeJoinColumns="true">
+    <viewAttributes>
+      <viewAttribute id="SALE_ID" aggregationType="sum"/>
+      <viewAttribute id="PRODUCT_ID" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY" aggregationType="sum"/>
+      <viewAttribute id="AMOUNT" aggregationType="sum"/>
+      <viewAttribute id="SALE_DATE"/>
+      <viewAttribute id="COUNTRY"/>
+      <viewAttribute id="SALE_ID_1" aggregationType="sum"/>
+      <viewAttribute id="PRODUCT_ID_1" aggregationType="sum"/>
+      <viewAttribute id="QUANTITY_1" aggregationType="sum"/>
+      <viewAttribute id="AMOUNT_1" aggregationType="sum"/>
+      <viewAttribute id="SALE_DATE_1"/>
+      <viewAttribute id="COUNTRY_1"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_ID" source="SALE_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AMOUNT" source="AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_DATE" source="SALE_DATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_ID_1" source="SALE_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID_1" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="QUANTITY_1" source="QUANTITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AMOUNT_1" source="AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALE_DATE_1" source="SALE_DATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_1" source="COUNTRY"/>
+    </input>
+    <joinAttribute leftColumn="SALE_ID" rightColumn="SALE_ID" operator="LE"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="NonEquiJoin_1">
+  <attributes>
+    <attribute id="SALE_DATE" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALE_DATE"/>
+      <keyMapping columnObjectName="NonEquiJoin_1" columnName="SALE_DATE"/>
+    </attribute>
+    <attribute id="COUNTRY" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COUNTRY"/>
+      <keyMapping columnObjectName="NonEquiJoin_1" columnName="COUNTRY"/>
+    </attribute>
+    <attribute id="SALE_DATE_1" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALE_DATE_1"/>
+      <keyMapping columnObjectName="NonEquiJoin_1" columnName="SALE_DATE_1"/>
+    </attribute>
+    <attribute id="COUNTRY_1" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COUNTRY_1"/>
+      <keyMapping columnObjectName="NonEquiJoin_1" columnName="COUNTRY_1"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="SALE_ID" order="1" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SALE_ID"/>
+      <measureMapping columnObjectName="NonEquiJoin_1" columnName="SALE_ID"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="PRODUCT_ID" order="2" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PRODUCT_ID"/>
+      <measureMapping columnObjectName="NonEquiJoin_1" columnName="PRODUCT_ID"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="QUANTITY" order="3" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="QUANTITY"/>
+      <measureMapping columnObjectName="NonEquiJoin_1" columnName="QUANTITY"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="AMOUNT" order="4" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="AMOUNT"/>
+      <measureMapping columnObjectName="NonEquiJoin_1" columnName="AMOUNT"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="SALE_ID_1" order="7" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SALE_ID_1"/>
+      <measureMapping columnObjectName="NonEquiJoin_1" columnName="SALE_ID_1"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="PRODUCT_ID_1" order="8" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PRODUCT_ID_1"/>
+      <measureMapping columnObjectName="NonEquiJoin_1" columnName="PRODUCT_ID_1"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="QUANTITY_1" order="9" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="QUANTITY_1"/>
+      <measureMapping columnObjectName="NonEquiJoin_1" columnName="QUANTITY_1"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="AMOUNT_1" order="10" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="AMOUNT_1"/>
+      <measureMapping columnObjectName="NonEquiJoin_1" columnName="AMOUNT_1"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="221.11302679000914" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92.00000000000001" y="376.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302.00000000000006" y="376.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="NonEquiJoin_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="221.11302679000914" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="NonEquiJoin_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="157"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="NonEquiJoin_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="157"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

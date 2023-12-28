@@ -1,0 +1,8 @@
+Column TABLE VTTK1 (
+    ShipmentNumber NVARCHAR(225) PRIMARY KEY,
+    ShipmentType NVARCHAR(225),
+    ShipmentDate DATE,
+    TransportCompany NVARCHAR(225),
+    VehicleNumber NVARCHAR(225),
+    Status NVARCHAR(225)
+);

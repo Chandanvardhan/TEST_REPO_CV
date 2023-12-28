@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="6_CV_SALES_RECORD" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" application="BAS" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="6_CV_SALES_RECORD.hdbcalculationview"/>
+<localVariables>
+  <variable id="IP_SALES_DOC_NUMBER" parameter="true">
+    <descriptions defaultDescription=""/>
+    <variableProperties datatype="NVARCHAR" length="225" mandatory="false">
+      <valueDomain type="AttributeValue">
+        <externalLikeStructureName>VBAP1</externalLikeStructureName>
+        <externalLikeElementName>SALESDOCUMENT</externalLikeElementName>
+      </valueDomain>
+      <selection multiLine="true" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="VBAK4">
+    <resourceUri>VBAK4</resourceUri>
+  </DataSource>
+  <DataSource id="VBAP1">
+    <resourceUri>VBAP1</resourceUri>
+  </DataSource>
+  <DataSource id="MARA2">
+    <resourceUri>MARA2</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="CUSTOMERNUMBER"/>
+      <viewAttribute id="SALESORG"/>
+      <viewAttribute id="DISTCHANNEL"/>
+      <viewAttribute id="DOCDATE"/>
+      <viewAttribute id="TOTALNETVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBAK4"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="ITEMNUMBER"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="QUANTITY"/>
+      <viewAttribute id="NETPRICE"/>
+      <viewAttribute id="ITEMVALUE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="VBAP1"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_1" cardinality="CN_N" joinType="inner" multiJoinNode="Join_1" multiJoinCentralTable="Projection_1" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="MATERIALDESCRIPTION"/>
+      <viewAttribute hidden="true" id="JOIN$MATERIALNUMBER$MATERIALNUMBER"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALNUMBER" source="MATERIALNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$MATERIALNUMBER$MATERIALNUMBER" source="MATERIALNUMBER"/>
+    </input>
+    <input node="MARA2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALDESCRIPTION" source="MATERIALDESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$MATERIALNUMBER$MATERIALNUMBER" source="MATERIALNUMBER"/>
+    </input>
+    <joinAttribute name="JOIN$MATERIALNUMBER$MATERIALNUMBER"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_2" cardinality="CN_N" joinType="leftOuter" multiJoinNode="Join_1" multiJoinCentralTable="Projection_1" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="SALESDOCUMENT"/>
+      <viewAttribute id="MATERIALNUMBER"/>
+      <viewAttribute id="MATERIALDESCRIPTION"/>
+      <viewAttribute id="TOTALNETVALUE" aggregationType="sum"/>
+      <viewAttribute hidden="true" id="JOIN$SALESDOCUMENT$SALESDOCUMENT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALNETVALUE" source="TOTALNETVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALESDOCUMENT$SALESDOCUMENT" source="SALESDOCUMENT"/>
+    </input>
+    <input node="Join_1_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESDOCUMENT" source="SALESDOCUMENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALNUMBER" source="MATERIALNUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIALDESCRIPTION" source="MATERIALDESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$SALESDOCUMENT$SALESDOCUMENT" source="SALESDOCUMENT"/>
+    </input>
+    <joinAttribute name="JOIN$SALESDOCUMENT$SALESDOCUMENT"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1_2" filterExpressionLanguage="SQL">
+  <attributes>
+    <attribute id="SALESDOCUMENT" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESDOCUMENT"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="SALESDOCUMENT"/>
+    </attribute>
+    <attribute id="MATERIALNUMBER" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MATERIALNUMBER"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="MATERIALNUMBER"/>
+    </attribute>
+    <attribute id="MATERIALDESCRIPTION" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MATERIALDESCRIPTION"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="MATERIALDESCRIPTION"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="TOTALNETVALUE" order="4" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTALNETVALUE"/>
+      <measureMapping columnObjectName="Join_1_2" columnName="TOTALNETVALUE"/>
+      <exceptionAggregationMetadata>
+        <attribute attributeName="SALESDOCUMENT"/>
+      </exceptionAggregationMetadata>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+
+  <filter>&quot;SALESDOCUMENT&quot; in ($$IP_SALES_DOC_NUMBER$$)</filter>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-115" y="356"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="242" y="356"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="196"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="136"/>
+    </shape>
+    <shape modelObjectName="MARA2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="620" y="30"/>
+      <rectangleSize width="215"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
